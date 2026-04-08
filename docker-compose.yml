@@ -19,6 +19,6 @@ services:
       - gfg-mysql-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: test_db
+      MYSQL_DATABASE: agenda_db
 volumes:
   gfg-mysql-data:
