@@ -2,7 +2,7 @@ package com.itacademy.cliagenda.application;
 
 public class AgendaApp {
 
-    //main app
+    //main
     public static void main (String[] args) {
 
     }
