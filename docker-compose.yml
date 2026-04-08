@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  app:
+    image: openjdk:17-jdk-slim
+    ports:
+      - 8080:8080
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: TeamApril
+      MYSQL_PASSWORD: 1234
+      MYSQL_DB: agenda_db
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - gfg-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: agenda_db
+volumes:
+  gfg-mysql-data:
