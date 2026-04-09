@@ -1,5 +1,6 @@
 package com.itacademy.cliagenda.note.repository;
 
+import com.itacademy.cliagenda.note.model.Event;
 import com.itacademy.cliagenda.note.model.Note;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,10 @@ class TestNotesRepository {
         note1 = new Note(1, "Nota 1");
         note2 = new Note(2, "Nota 2");
         note3 = new Note(3, "Nota 3");
-        note1.setEvent_fk(1);
-        note2.setEvent_fk(2);
-        note3.setEvent_fk(1);
+        java.time.LocalDateTime eventDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
+        note1.setEvent_fk(new Event(1, "Evento 1", eventDate));
+        note2.setEvent_fk(new Event(2, "Evento 2", eventDate));
+        note3.setEvent_fk(new Event(1, "Evento 1", eventDate));
         
         List<Note> notes = new ArrayList<>();
         notes.add(note1);

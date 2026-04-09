@@ -79,16 +79,27 @@ class TestNotes {
     @Test
     void testSetEvent_fkValido() {
         Note nota = new Note(1, "Cuerpo de prueba");
-        nota.setEvent_fk(5);
+        java.time.LocalDateTime eventDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
+        Event event = new Event(5, "Evento prueba", eventDate);
+        nota.setEvent_fk(event);
         assertEquals(5, nota.getEvent_fk());
     }
 
     @Test
     void testSetEvent_fkNegativo() {
         Note nota = new Note(1, "Cuerpo de prueba");
-        nota.setEvent_fk(5);
-        nota.setEvent_fk(-1);
+        java.time.LocalDateTime eventDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
+        nota.setEvent_fk(new Event(5, "Evento prueba", eventDate));
+        nota.setEvent_fk(new Event(-1, "Evento negativo", eventDate));
         assertEquals(5, nota.getEvent_fk());
+    }
+
+    @Test
+    void testSetEvent_fkCero() {
+        Note nota = new Note(1, "Cuerpo de prueba");
+        java.time.LocalDateTime eventDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
+        nota.setEvent_fk(new Event(0, "Evento cero", eventDate));
+        assertEquals(0, nota.getEvent_fk());
     }
 
     @Test
@@ -102,13 +113,6 @@ class TestNotes {
         assertEquals(creationDate.toString(), nota.getCreationDate());
         assertEquals(lastUpdateDate, nota.getLastUpdateDate());
         assertEquals(5, nota.getEvent_fk());
-    }
-
-    @Test
-    void testSetEvent_fkCero() {
-        Note nota = new Note(1, "Cuerpo de prueba");
-        nota.setEvent_fk(0);
-        assertEquals(0, nota.getEvent_fk());
     }
 
     @Test

@@ -56,12 +56,12 @@ public class Note {
         return event_fk;
     }
 
-    public void setEvent_fk(int event_fk) {
+    public void setEvent_fk(Event event) {
         try{
-            if (event_fk < 0) {
+            if (event.getId() < 0) {
                 throw new IllegalArgumentException("El valor proporcionado para event_fk no es válido.");
             }
-            this.event_fk = event_fk;
+            this.event_fk = event.getId();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
