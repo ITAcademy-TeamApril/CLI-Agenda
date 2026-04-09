@@ -19,6 +19,15 @@ class TestNotesRepository {
         note1 = new Note(1, "Nota 1");
         note2 = new Note(2, "Nota 2");
         note3 = new Note(3, "Nota 3");
+        note1.setEvent_fk(1);
+        note2.setEvent_fk(2);
+        note3.setEvent_fk(1);
+        
+        List<Note> notes = new ArrayList<>();
+        notes.add(note1);
+        notes.add(note2);
+        notes.add(note3);
+        repository = new NotesRepository(notes);
     }
 
     @Test
@@ -123,5 +132,49 @@ class TestNotesRepository {
         repository.removeNoteById(99);
         
         assertEquals(2, repository.getNotes().size());
+    }
+
+    @Test
+    void testGetNoteById() {
+        Note result = repository.getNoteById(2);
+        
+        assertNotNull(result);
+        assertEquals(2, result.getId());
+        assertEquals("Nota 2", result.getBody());
+    }
+
+    @Test
+    void testGetNoteByIdNotFound() {
+        Note result = repository.getNoteById(99);
+        
+        assertNull(result);
+    }
+
+    @Test
+    void testGetNoteByEventFK() {
+        List<Note> result = repository.getNotesByEventFK(2);
+        
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(2, result.get(0).getEvent_fk());
+        assertEquals("Nota 2", result.get(0).getBody());
+    }
+
+    @Test
+    void testGetNoteByEventFKNotFound() {
+        List<Note> result = repository.getNotesByEventFK(99);
+        
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testGetNoteByEventFKReturnsAllMatches() {
+        List<Note> result = repository.getNotesByEventFK(1);
+        
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertTrue(result.contains(note1));
+        assertTrue(result.contains(note3));
     }
 }

@@ -90,4 +90,49 @@ class TestNotes {
         nota.setEvent_fk(-1);
         assertEquals(5, nota.getEvent_fk());
     }
+
+    @Test
+    void testConstructorFullParams() {
+        java.time.LocalDateTime creationDate = java.time.LocalDateTime.of(2024, 1, 1, 10, 0);
+        java.time.LocalDateTime lastUpdateDate = java.time.LocalDateTime.of(2024, 1, 2, 12, 0);
+        Note nota = new Note(1, "Cuerpo válido", creationDate, lastUpdateDate, 5);
+        
+        assertEquals(1, nota.getId());
+        assertEquals("Cuerpo válido", nota.getBody());
+        assertEquals(creationDate.toString(), nota.getCreationDate());
+        assertEquals(lastUpdateDate, nota.getLastUpdateDate());
+        assertEquals(5, nota.getEvent_fk());
+    }
+
+    @Test
+    void testSetEvent_fkCero() {
+        Note nota = new Note(1, "Cuerpo de prueba");
+        nota.setEvent_fk(0);
+        assertEquals(0, nota.getEvent_fk());
+    }
+
+    @Test
+    void testLastUpdateDateActualizado() {
+        Note nota = new Note(1, "Cuerpo original");
+        java.time.LocalDateTime fechaAntes = nota.getLastUpdateDate();
+        
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        nota.changeBody("Cuerpo actualizado");
+        java.time.LocalDateTime fechaDespues = nota.getLastUpdateDate();
+        
+        assertNotNull(fechaDespues);
+        assertTrue(fechaDespues.isAfter(fechaAntes) || fechaDespues.isEqual(fechaAntes));
+    }
+
+    @Test
+    void testLastUpdateDateNoNuloTrasChangeBody() {
+        Note nota = new Note(1, "Cuerpo original");
+        nota.changeBody("Cuerpo actualizado");
+        assertNotNull(nota.getLastUpdateDate());
+    }
 }
