@@ -4,14 +4,24 @@ import java.time.LocalDateTime;
 
 public class Note {
     private final int id;
-    private final LocalDateTime creationDate = LocalDateTime.now();
+    private LocalDateTime creationDate = LocalDateTime.now();
     private LocalDateTime lastUpdateDate;
     private String body;
     private int event_fk;
 
+    //Usar este constructor para crear nuevas Notas.
     public Note(int id, String body) {
         this.id = id;
         changeBody(body);
+    }
+
+    //Usar este constructor para cuando haya que recrear los objetos Notas desde la base de datos.
+    public Note(int id, String body, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int event_fk) {
+        this.id = id;
+        this.creationDate=creationDate;
+        this.lastUpdateDate=lastUpdateDate;
+        this.body=body;
+        this.event_fk=event_fk;
     }
 
     public int getId() {
