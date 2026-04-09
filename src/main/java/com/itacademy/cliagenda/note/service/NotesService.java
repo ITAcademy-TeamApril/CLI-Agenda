@@ -43,7 +43,7 @@ public class NotesService {
         );
     }
 
-    private List<Note> extractDatabase(){
+    List<Note> extractDatabase(){
         List<Note> notes = new ArrayList<>();
         String query = "SELECT id, body, creation_date, last_update_date, event_fk FROM notes";
         
@@ -68,15 +68,15 @@ public class NotesService {
         return notes;
     }
 
-    private Note createNoteAllParams(int id, String body, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int event_fk){
+    Note createNoteAllParams(int id, String body, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int event_fk){
         return new Note(id, body, creationDate, lastUpdateDate, event_fk);
     }
 
-    private Note createNote(int id, String body){
+    Note createNote(int id, String body){
         return new Note(id, body);
     }
 
-    private int checkNoteId(){
+    int checkNoteId(){
         List<Note> notes = repo.getNotes();
         if (notes.isEmpty()) {
             return 0;
@@ -111,7 +111,7 @@ public class NotesService {
             
             pstmt.setInt(1, note.getId());
             pstmt.setString(2, note.getBody());
-            pstmt.setTimestamp(3, Timestamp.valueOf(note.getCreationDate()));
+            pstmt.setTimestamp(3, Timestamp.valueOf(note.getCreationDate().replace("T", " ")));
             pstmt.setTimestamp(4, note.getLastUpdateDate() != null ? Timestamp.valueOf(note.getLastUpdateDate()) : null);
             pstmt.setInt(5, note.getEvent_fk());
             
