@@ -13,6 +13,10 @@ public class NotesRepository {
         addNotes(Notes);
     }
 
+    public NotesRepository() {
+        this.Notes = new ArrayList<>();
+    }
+
     public List<Note> getNotes() {
         return Notes;
     }
