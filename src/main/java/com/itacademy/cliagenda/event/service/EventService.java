@@ -1,12 +1,51 @@
 package com.itacademy.cliagenda.event.service;
 
 import com.itacademy.cliagenda.event.model.Event;
+import com.itacademy.cliagenda.event.repository.EventRepository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Scanner;
 
 public class EventService {
+    Scanner scanner = new Scanner(System.in);
+    EventRepository repo = new EventRepository();
+
+    public EventService(EventRepository repo) {
+        this.repo = repo;
+    }
 
     //CREATE
-    public void createEvent(Event event){
+    public void createEvent() {
+        int idEvent;
+        String description;
+        String title;
+        LocalDateTime dateCreation = LocalDateTime.now();
+        boolean recurring;
+        String userText;
 
+        System.out.println("Introduce Event id");
+        idEvent = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Introduce Event title");
+        title = scanner.nextLine();
+        System.out.println("Introduce Event description");
+        description = scanner.nextLine();
+        System.out.println("This event will be recurring?(Y or N)");
+        userText = scanner.nextLine();
+        recurring = false;
+        if(userText.equalsIgnoreCase("y")) {
+            recurring = true;
+        }
+
+        Event newEvent = new Event(idEvent, description, title, dateCreation, recurring);
+        repo.save(newEvent);
+        System.out.println("New event with tittle \"" + title +"\" has been created" );
+    }
+
+    public List<Event> getAllEvents(){
+
+        return repo.getAllEvents();
     }
 
 

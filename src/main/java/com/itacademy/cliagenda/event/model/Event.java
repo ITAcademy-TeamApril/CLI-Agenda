@@ -12,7 +12,7 @@ public class Event {
     private boolean recurring;
     private List<Integer> taskIds;
 
-    public Event(int idEvent, String description, String title, LocalDateTime dateTimeEvent, boolean recurring, List<Integer> taskIds) {
+    public Event(int idEvent, String description, String title, LocalDateTime dateTimeEvent, boolean recurring) {
         this.idEvent = idEvent;
         this.description = description;
         this.title = title;
