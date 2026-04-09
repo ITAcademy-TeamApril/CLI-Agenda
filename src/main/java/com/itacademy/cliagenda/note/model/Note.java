@@ -2,13 +2,14 @@ package com.itacademy.cliagenda.note.model;
 
 import java.time.LocalDateTime;
 
-public class note {
+public class Note {
     private final int id;
     private final LocalDateTime creationDate = LocalDateTime.now();
     private LocalDateTime lastUpdateDate;
     private String body;
+    private int event_fk;
 
-    public note(int id, String body) {
+    public Note(int id, String body) {
         this.id = id;
         changeBody(body);
     }
@@ -39,5 +40,20 @@ public class note {
 
     public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;
+    }
+
+    public int getEvent_fk() {
+        return event_fk;
+    }
+
+    public void setEvent_fk(int event_fk) {
+        try{
+            if (event_fk < 0) {
+                throw new IllegalArgumentException("El valor proporcionado para event_fk no es válido.");
+            }
+            this.event_fk = event_fk;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
