@@ -6,35 +6,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotesRepository {
-    private List<Note> Notes;
+    private List<Note> notes;
 
     public NotesRepository(List<Note> Notes) {
-        this.Notes = new ArrayList<>();
+        this.notes = new ArrayList<>();
         addNotes(Notes);
     }
 
     public NotesRepository() {
-        this.Notes = new ArrayList<>();
+        this.notes = new ArrayList<>();
     }
 
     public List<Note> getNotes() {
-        return Notes;
+        return notes;
     }
 
     public void addNotes(List<Note> Notes) {
         if (Notes != null && !Notes.isEmpty()) {
-            this.Notes.addAll(Notes);
+            this.notes.addAll(Notes);
         }
     }
     public void addIndividualNote(Note note) {
         if (note != null) {
-            this.Notes.add(note);
+            this.notes.add(note);
         }
     }
 
     public void removeLastNote() {
-        if (!Notes.isEmpty()) {
-            Notes.remove(Notes.size() - 1);
+        if (!notes.isEmpty()) {
+            notes.remove(notes.size() - 1);
         } else {
             System.out.println("No hay notas para eliminar.");
         }
@@ -42,16 +42,33 @@ public class NotesRepository {
 
     public void removeNoteById(int id) {
         Note noteToRemove = null;
-        for (Note note : Notes) {
+        for (Note note : notes) {
             if (note.getId() == id) {
                 noteToRemove = note;
                 break;
             }
         }
         if (noteToRemove != null) {
-            Notes.remove(noteToRemove);
+            notes.remove(noteToRemove);
         } else {
             System.out.println("No se encontró ninguna nota con el ID: " + id);
         }
+    }
+    public Note getNoteById(int id){
+        for (Note note : notes) {
+            if (note.getId() == id) {
+                return note;
+            }
+        }
+        return null;
+    }
+    public List<Note> getNotesByEventFK(int event_fk){
+        List<Note> result = new ArrayList<>();
+        for (Note note : notes) {
+            if (note.getEvent_fk() == event_fk) {
+                result.add(note);
+            }
+        }
+        return result;
     }
 }
