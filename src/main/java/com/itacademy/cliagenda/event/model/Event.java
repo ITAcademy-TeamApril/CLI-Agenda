@@ -5,14 +5,22 @@ import java.util.List;
 
 public class Event {
 
-    private int idEvent;
+    private final int idEvent;
     private String description;
     private String title;
     private LocalDateTime dateTimeEvent;
     private boolean recurring;
     private List<Integer> taskIds;
 
-    public Event(int idEvent, String description, String title, LocalDateTime dateTimeEvent, boolean recurring) {
+    public Event(int idEvent, String description, String title, boolean recurring) {
+        this.idEvent = idEvent;
+        changeDescription(description);
+        changeTitle(title);
+        this.dateTimeEvent = LocalDateTime.now();
+        this.recurring = recurring;
+    }
+
+    public Event(int idEvent, String description, String title, LocalDateTime dateTimeEvent, boolean recurring, List<Integer> taskIds) {
         this.idEvent = idEvent;
         this.description = description;
         this.title = title;
@@ -45,18 +53,6 @@ public class Event {
         return taskIds;
     }
 
-    public void setIdEvent(int idEvent) {
-        this.idEvent = idEvent;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public void setDateTimeEvent(LocalDateTime dateTimeEvent) {
         this.dateTimeEvent = dateTimeEvent;
     }
@@ -67,5 +63,24 @@ public class Event {
 
     public void setTaskIds(List<Integer> taskIds) {
         this.taskIds = taskIds;
+    }
+
+    public void changeTitle(String title) {
+        try {
+            if (title == null) throw new  IllegalArgumentException("Title can't be null");
+            if (title.length() >= 100) throw new IllegalArgumentException("Title must be shorter than 100 characters");
+            this.title = title;
+        } catch(Exception e){
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public void changeDescription(String description) {
+        try {
+            if (description != null && description.length() >= 500) throw new IllegalArgumentException("Description must be shorter than 500 characters");
+            this.description = description;
+        } catch(Exception e){
+            System.err.println(e.getMessage());
+        }
     }
 }

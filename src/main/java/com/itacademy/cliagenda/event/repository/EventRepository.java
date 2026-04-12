@@ -16,7 +16,7 @@ public class EventRepository {
 
     //LIST ALL EVENTS
     public List<Event> getAllEvents(){
-        return eventList;
+        return List.copyOf(eventList);
     }
 
     //FIND EVENT BY ID
@@ -28,6 +28,23 @@ public class EventRepository {
         }
         System.out.println("Event not found");
         return null;
+    }
+
+    //REMOVE EVENTS FROM ID
+    public void removeEventById(int id) {
+        Event eventToRemove = null;
+        for(Event element : eventList) {
+            if(element.getIdEvent() == id) {
+                eventToRemove = element;
+                break;
+            }
+        }
+        if(eventToRemove != null) {
+            eventList.remove(eventToRemove);
+        } else {
+            System.out.println("Event not found with ID: " + id);
+        }
+
     }
 
 

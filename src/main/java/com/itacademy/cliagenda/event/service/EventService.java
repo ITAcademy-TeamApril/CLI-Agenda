@@ -17,16 +17,12 @@ public class EventService {
 
     //CREATE
     public void createEvent() {
-        int idEvent;
         String description;
         String title;
-        LocalDateTime dateCreation = LocalDateTime.now();
         boolean recurring;
         String userText;
 
-        System.out.println("Introduce Event id");
-        idEvent = scanner.nextInt();
-        scanner.nextLine();
+        int idEvent = checkEventId() + 1;
         System.out.println("Introduce Event title");
         title = scanner.nextLine();
         System.out.println("Introduce Event description");
@@ -38,14 +34,28 @@ public class EventService {
             recurring = true;
         }
 
-        Event newEvent = new Event(idEvent, description, title, dateCreation, recurring);
+        Event newEvent = new Event(idEvent, description, title, recurring);
         repo.save(newEvent);
-        System.out.println("New event with tittle \"" + title +"\" has been created" );
+        System.out.println("New event with title \"" + title +"\" has been created" );
     }
 
     public List<Event> getAllEvents(){
 
         return repo.getAllEvents();
+    }
+
+    int checkEventId() {
+        List<Event> events = repo.getAllEvents();
+        if (events.isEmpty()) {
+            return 0;
+        }
+        int maxId = 0;
+        for (Event event : events) {
+            if (event.getIdEvent() > maxId) {
+                maxId = event.getIdEvent();
+            }
+        }
+        return maxId;
     }
 
 
