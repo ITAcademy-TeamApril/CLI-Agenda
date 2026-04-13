@@ -1,5 +1,7 @@
 package com.itacademy.cliagenda.event.cli;
 
+import com.itacademy.cliagenda.common.utils.ConsoleUtils;
+
 import java.util.Scanner;
 
 public class EventCli {

@@ -1,11 +1,19 @@
 package com.itacademy.cliagenda.application.menu;
 
+import com.itacademy.cliagenda.common.utils.ConsoleUtils;
+import com.itacademy.cliagenda.event.cli.EventCli;
+import com.itacademy.cliagenda.note.cli.NoteCli;
+import com.itacademy.cliagenda.task.cli.TaskCli;
+
 import java.util.Scanner;
 
 public class AppMenu {
 
     Scanner scanner = new Scanner(System.in);
     int userOption = -1;
+    EventCli eventCli = new EventCli();
+    TaskCli taskCli = new TaskCli();
+    NoteCli noteCli = new NoteCli();
 
     public void playMenu() {
         do {
@@ -21,16 +29,17 @@ public class AppMenu {
 
             switch (userOption) {
                 case (1):
-                    // TODO: taskCli.showMenu()
+                    taskCli.showMenu();
                     break;
                 case (2):
-                    // TODO: noteCli.showMenu()
+                    noteCli.showMenu();
                     break;
                 case (3):
-                    // TODO: eventCli.showMenu()
+                    eventCli.showMenu();
                     break;
             }
         } while (userOption != 0);
         System.out.println("Bye my friend...");
     }
+
 }
