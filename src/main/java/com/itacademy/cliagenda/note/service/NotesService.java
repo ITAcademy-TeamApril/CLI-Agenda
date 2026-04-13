@@ -1,6 +1,6 @@
 package com.itacademy.cliagenda.note.service;
 
-import com.itacademy.cliagenda.infrastructure.sql.dao.NotesDao;
+import com.itacademy.cliagenda.infrastructure.sql.dao.SqlDao;
 import com.itacademy.cliagenda.note.model.Note;
 import com.itacademy.cliagenda.note.repository.NotesRepository;
 
@@ -11,11 +11,11 @@ import java.util.Scanner;
 public class NotesService {
 
     private NotesRepository repo;
-    private NotesDao dao;
+    private SqlDao dao;
 
     public NotesService() {
         this.repo = new NotesRepository();
-        this.dao = new NotesDao();
+        this.dao = SqlDao.getInstance();
         repo.addNotes(dao.findAll());
     }
 

@@ -10,11 +10,11 @@ import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestNotesDao {
+class TestSqlDao {
 
     private static Connection connection;
     private static Process dockerProcess;
-    private NotesDao notesDao;
+    private SqlDao sqlDao;
 
     @BeforeAll
     static void setUpAll() throws Exception {
@@ -25,7 +25,7 @@ class TestNotesDao {
 
     @BeforeEach
     void setUp() throws Exception {
-        notesDao = new NotesDao();
+        sqlDao = SqlDao.getInstance();
     }
 
     @AfterAll
@@ -58,7 +58,7 @@ class TestNotesDao {
 
     private static void loadProperties() throws Exception {
         Properties props = new Properties();
-        try (InputStream input = TestNotesDao.class.getClassLoader().getResourceAsStream("com/itacademy/cliagenda/application/config/application.properties")) {
+        try (InputStream input = TestSqlDao.class.getClassLoader().getResourceAsStream("com/itacademy/cliagenda/application/config/application.properties")) {
             if (input == null) {
                 throw new RuntimeException("No se pudo encontrar application.properties");
             }
@@ -89,7 +89,7 @@ class TestNotesDao {
         
         StringBuilder sql = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(TestNotesDao.class.getClassLoader().getResourceAsStream("schema.sql")))) {
+                new InputStreamReader(TestSqlDao.class.getClassLoader().getResourceAsStream("schema.sql")))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 sql.append(line).append("\n");
@@ -140,7 +140,7 @@ class TestNotesDao {
 
     @Test
     void testFindAllReturnsNotes() {
-        List<Note> notes = notesDao.findAll();
+        List<Note> notes = sqlDao.findAll();
         
         assertNotNull(notes);
         assertTrue(notes.size() >= 3, "Should have at least 3 notes from schema");
@@ -148,7 +148,7 @@ class TestNotesDao {
 
     @Test
     void testFindAllReturnsNoteWithCorrectData() {
-        List<Note> notes = notesDao.findAll();
+        List<Note> notes = sqlDao.findAll();
         
         Note firstNote = notes.stream()
             .filter(n -> n.getId() == 1)
@@ -163,7 +163,7 @@ class TestNotesDao {
     void testFindAllReturnsEmptyListWhenNoNotes() throws SQLException {
         deleteAllNotes();
         
-        List<Note> notes = notesDao.findAll();
+        List<Note> notes = sqlDao.findAll();
         
         assertNotNull(notes);
         assertTrue(notes.isEmpty(), "Should return empty list when no notes");
@@ -177,7 +177,7 @@ class TestNotesDao {
         
         Note note = new Note(999, "Nota para test de inserción");
         note.setTask_fk(new Task(1, "Tarea de prueba", java.time.LocalDateTime.now()));
-        notesDao.save(note);
+        sqlDao.save(note);
         
         int finalCount = getNotesCount();
         
@@ -190,7 +190,7 @@ class TestNotesDao {
     void testSavePersistsCorrectData() throws SQLException {
         Note note = new Note(888, "Nota con datos persistentes");
         note.setTask_fk(new Task(1, "Tarea de prueba", java.time.LocalDateTime.now()));
-        notesDao.save(note);
+        sqlDao.save(note);
         
         Note retrieved = getNoteById(888);
         
