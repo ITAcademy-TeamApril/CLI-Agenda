@@ -62,10 +62,10 @@ public class NotesRepository {
         }
         return null;
     }
-    public List<Note> getNotesByEventFK(int event_fk){
+    public List<Note> getNotesByTaskFK(int task_fk){
         List<Note> result = new ArrayList<>();
         for (Note note : notes) {
-            if (note.getEvent_fk() == event_fk) {
+            if (note.getTask_fk() == task_fk) {
                 result.add(note);
             }
         }

@@ -1,6 +1,7 @@
 package com.itacademy.cliagenda.note.service;
 
 import com.itacademy.cliagenda.note.model.Note;
+import com.itacademy.cliagenda.note.model.Task;
 import org.junit.jupiter.api.*;
 import java.io.*;
 import java.sql.*;
@@ -172,7 +173,7 @@ class TestNotesService {
         assertNotNull(note);
         assertEquals(1, note.getId());
         assertEquals("Nota completa", note.getBody());
-        assertEquals(1, note.getEvent_fk());
+        assertEquals(1, note.getTask_fk());
     }
 
     @Test
@@ -180,7 +181,7 @@ class TestNotesService {
         int initialCount = getNotesCount();
         
         Note note = notesService.createNote(999, "Nota para test de inserción");
-        note.setEvent_fk(new com.itacademy.cliagenda.note.model.Event(1, "Evento prueba", java.time.LocalDateTime.now()));
+        note.setTask_fk(new Task(1, "Tarea de prueba", java.time.LocalDateTime.now()));
         notesService.addNoteDB(note);
         
         int finalCount = getNotesCount();

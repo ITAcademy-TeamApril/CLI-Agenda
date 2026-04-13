@@ -24,7 +24,7 @@ public class NotesService {
     }
 
     private void loadProperties() {
-        props = new Properties();
+        this.props = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
             if (input == null) {
                 throw new RuntimeException("No se pudo encontrar application.properties");
@@ -43,9 +43,9 @@ public class NotesService {
         );
     }
 
-    List<Note> extractDatabase(){
+    public List<Note> extractDatabase(){
         List<Note> notes = new ArrayList<>();
-        String query = "SELECT id, body, creation_date, last_update_date, event_fk FROM notes";
+        String query = "SELECT id, body, creation_date, last_update_date, task_fk FROM notes";
         
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
@@ -58,9 +58,9 @@ public class NotesService {
                 LocalDateTime lastUpdateDate = rs.getTimestamp("last_update_date") != null 
                     ? rs.getTimestamp("last_update_date").toLocalDateTime() 
                     : null;
-                int event_fk = rs.getInt("event_fk");
+                int task_fk = rs.getInt("task_fk");
                 
-                notes.add(createNoteAllParams(id, body, creationDate, lastUpdateDate, event_fk));
+                notes.add(createNoteAllParams(id, body, creationDate, lastUpdateDate, task_fk));
             }
         } catch (SQLException e) {
             System.err.println("Error al extraer notas de la base de datos: " + e.getMessage());
@@ -68,8 +68,8 @@ public class NotesService {
         return notes;
     }
 
-    Note createNoteAllParams(int id, String body, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int event_fk){
-        return new Note(id, body, creationDate, lastUpdateDate, event_fk);
+    Note createNoteAllParams(int id, String body, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int task_fk){
+        return new Note(id, body, creationDate, lastUpdateDate, task_fk);
     }
 
     Note createNote(int id, String body){
@@ -104,7 +104,7 @@ public class NotesService {
     }
 
     public void addNoteDB(Note note){
-        String query = "INSERT INTO notes (id, body, creation_date, last_update_date, event_fk) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO notes (id, body, creation_date, last_update_date, task_fk) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -113,7 +113,7 @@ public class NotesService {
             pstmt.setString(2, note.getBody());
             pstmt.setTimestamp(3, Timestamp.valueOf(note.getCreationDate().replace("T", " ")));
             pstmt.setTimestamp(4, note.getLastUpdateDate() != null ? Timestamp.valueOf(note.getLastUpdateDate()) : null);
-            pstmt.setInt(5, note.getEvent_fk());
+            pstmt.setInt(5, note.getTask_fk());
             
             pstmt.executeUpdate();
         } catch (SQLException e) {

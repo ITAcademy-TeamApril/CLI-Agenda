@@ -1,6 +1,6 @@
 package com.itacademy.cliagenda.note.repository;
 
-import com.itacademy.cliagenda.note.model.Event;
+import com.itacademy.cliagenda.note.model.Task;
 import com.itacademy.cliagenda.note.model.Note;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,10 @@ class TestNotesRepository {
         note1 = new Note(1, "Nota 1");
         note2 = new Note(2, "Nota 2");
         note3 = new Note(3, "Nota 3");
-        java.time.LocalDateTime eventDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
-        note1.setEvent_fk(new Event(1, "Evento 1", eventDate));
-        note2.setEvent_fk(new Event(2, "Evento 2", eventDate));
-        note3.setEvent_fk(new Event(1, "Evento 1", eventDate));
+        java.time.LocalDateTime taskDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
+        note1.setTask_fk(new Task(1, "Evento 1", taskDate));
+        note2.setTask_fk(new Task(2, "Evento 2", taskDate));
+        note3.setTask_fk(new Task(1, "Evento 1", taskDate));
         
         List<Note> notes = new ArrayList<>();
         notes.add(note1);
@@ -153,26 +153,26 @@ class TestNotesRepository {
     }
 
     @Test
-    void testGetNoteByEventFK() {
-        List<Note> result = repository.getNotesByEventFK(2);
+    void testGetNoteByTaskFK() {
+        List<Note> result = repository.getNotesByTaskFK(2);
         
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(2, result.get(0).getEvent_fk());
+        assertEquals(2, result.get(0).getTask_fk());
         assertEquals("Nota 2", result.get(0).getBody());
     }
 
     @Test
-    void testGetNoteByEventFKNotFound() {
-        List<Note> result = repository.getNotesByEventFK(99);
+    void testGetNoteByTaskFKNotFound() {
+        List<Note> result = repository.getNotesByTaskFK(99);
         
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
 
     @Test
-    void testGetNoteByEventFKReturnsAllMatches() {
-        List<Note> result = repository.getNotesByEventFK(1);
+    void testGetNoteByTaskFKReturnsAllMatches() {
+        List<Note> result = repository.getNotesByTaskFK(1);
         
         assertNotNull(result);
         assertEquals(2, result.size());

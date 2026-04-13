@@ -71,35 +71,35 @@ class TestNotes {
     }
 
     @Test
-    void testGetEvent_fk() {
+    void testGetTask_fk() {
         Note nota = new Note(1, "Cuerpo de prueba");
-        assertEquals(0, nota.getEvent_fk());
+        assertEquals(0, nota.getTask_fk());
     }
 
     @Test
-    void testSetEvent_fkValido() {
+    void testSetTask_fkValido() {
         Note nota = new Note(1, "Cuerpo de prueba");
-        java.time.LocalDateTime eventDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
-        Event event = new Event(5, "Evento prueba", eventDate);
-        nota.setEvent_fk(event);
-        assertEquals(5, nota.getEvent_fk());
+        java.time.LocalDateTime taskDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
+        Task task = new Task(5, "Evento prueba", taskDate);
+        nota.setTask_fk(task);
+        assertEquals(5, nota.getTask_fk());
     }
 
     @Test
-    void testSetEvent_fkNegativo() {
+    void testSetTask_fkNegativo() {
         Note nota = new Note(1, "Cuerpo de prueba");
-        java.time.LocalDateTime eventDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
-        nota.setEvent_fk(new Event(5, "Evento prueba", eventDate));
-        nota.setEvent_fk(new Event(-1, "Evento negativo", eventDate));
-        assertEquals(5, nota.getEvent_fk());
+        java.time.LocalDateTime taskDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
+        nota.setTask_fk(new Task(5, "Tarea prueba", taskDate));
+        nota.setTask_fk(new Task(-1, "Tarea negativa", taskDate));
+        assertEquals(5, nota.getTask_fk());
     }
 
     @Test
-    void testSetEvent_fkCero() {
+    void testSetTask_fkCero() {
         Note nota = new Note(1, "Cuerpo de prueba");
-        java.time.LocalDateTime eventDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
-        nota.setEvent_fk(new Event(0, "Evento cero", eventDate));
-        assertEquals(0, nota.getEvent_fk());
+        java.time.LocalDateTime taskDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
+        nota.setTask_fk(new Task(0, "Tarea cero", taskDate));
+        assertEquals(0, nota.getTask_fk());
     }
 
     @Test
@@ -112,7 +112,7 @@ class TestNotes {
         assertEquals("Cuerpo válido", nota.getBody());
         assertEquals(creationDate.toString(), nota.getCreationDate());
         assertEquals(lastUpdateDate, nota.getLastUpdateDate());
-        assertEquals(5, nota.getEvent_fk());
+        assertEquals(5, nota.getTask_fk());
     }
 
     @Test
