@@ -1,6 +1,8 @@
 package com.itacademy.cliagenda.application.menu;
 
 import com.itacademy.cliagenda.event.cli.EventCli;
+import com.itacademy.cliagenda.event.repository.EventRepository;
+import com.itacademy.cliagenda.event.service.EventService;
 import com.itacademy.cliagenda.task.cli.TaskCli;
 import com.itacademy.cliagenda.note.cli.NoteCli;
 
@@ -10,7 +12,11 @@ public class AppMenu {
 
     Scanner scanner = new Scanner(System.in);
     int userOption = -1;
-    EventCli eventCli = new EventCli();
+
+    EventRepository eventRepo = new EventRepository();
+    EventService eventService = new EventService(eventRepo);
+    EventCli eventCli = new EventCli(eventService);
+
     TaskCli taskCli = new TaskCli();
     NoteCli noteCli = new NoteCli();
 
