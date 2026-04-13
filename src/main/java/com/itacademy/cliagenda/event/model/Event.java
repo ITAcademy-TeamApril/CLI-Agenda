@@ -1,6 +1,7 @@
 package com.itacademy.cliagenda.event.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
@@ -12,14 +13,7 @@ public class Event {
     private boolean recurring;
     private List<Integer> taskIds;
 
-    public Event(int idEvent, String description, String title, boolean recurring) {
-        this.idEvent = idEvent;
-        changeDescription(description);
-        changeTitle(title);
-        this.dateTimeEvent = LocalDateTime.now();
-        this.recurring = recurring;
-    }
-
+    // constructor completo
     public Event(int idEvent, String description, String title, LocalDateTime dateTimeEvent, boolean recurring, List<Integer> taskIds) {
         this.idEvent = idEvent;
         this.description = description;
@@ -27,6 +21,16 @@ public class Event {
         this.dateTimeEvent = dateTimeEvent;
         this.recurring = recurring;
         this.taskIds = taskIds;
+    }
+
+    //constructor sin taskIds list
+    public Event(int idEvent, String description, String title, LocalDateTime dateTimeEvent, boolean recurring) {
+        this.idEvent = idEvent;
+        this.description = description;
+        this.title = title;
+        this.dateTimeEvent = dateTimeEvent;
+        this.recurring = recurring;
+        this.taskIds = new ArrayList<>();
     }
 
     public int getIdEvent() {
@@ -51,10 +55,6 @@ public class Event {
 
     public List<Integer> getTaskIds() {
         return taskIds;
-    }
-
-    public void setDateTimeEvent(LocalDateTime dateTimeEvent) {
-        this.dateTimeEvent = dateTimeEvent;
     }
 
     public void setRecurring(boolean recurring) {
