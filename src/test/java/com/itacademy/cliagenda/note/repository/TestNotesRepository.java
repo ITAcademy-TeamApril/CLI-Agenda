@@ -1,6 +1,6 @@
 package com.itacademy.cliagenda.note.repository;
 
-import com.itacademy.cliagenda.note.model.Task;
+import com.itacademy.cliagenda.task.model.Task;
 import com.itacademy.cliagenda.note.model.Note;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

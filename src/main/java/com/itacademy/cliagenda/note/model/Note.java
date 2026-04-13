@@ -1,5 +1,7 @@
 package com.itacademy.cliagenda.note.model;
 
+import com.itacademy.cliagenda.task.model.Task;
+
 import java.time.LocalDateTime;
 
 public class Note {

@@ -20,7 +20,7 @@ public class NotesService {
     public NotesService() {
         this.repo = new NotesRepository();
         loadProperties();
-        repo.addNotes(extractDatabase());
+        repo.addNotes(extractDatabaseNotesTable());
     }
 
     private void loadProperties() {
@@ -43,7 +43,7 @@ public class NotesService {
         );
     }
 
-    public List<Note> extractDatabase(){
+    public List<Note> extractDatabaseNotesTable(){
         List<Note> notes = new ArrayList<>();
         String query = "SELECT id, body, creation_date, last_update_date, task_fk FROM notes";
         

@@ -1,5 +1,6 @@
 package com.itacademy.cliagenda.note.model;
 
+import com.itacademy.cliagenda.task.model.Task;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

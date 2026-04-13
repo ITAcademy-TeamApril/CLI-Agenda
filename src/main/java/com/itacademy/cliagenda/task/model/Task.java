@@ -1,4 +1,4 @@
-package com.itacademy.cliagenda.note.model;
+package com.itacademy.cliagenda.task.model;
 
 import java.time.LocalDateTime;
 

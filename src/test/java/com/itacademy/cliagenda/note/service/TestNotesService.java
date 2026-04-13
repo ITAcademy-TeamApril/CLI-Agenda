@@ -1,7 +1,7 @@
 package com.itacademy.cliagenda.note.service;
 
 import com.itacademy.cliagenda.note.model.Note;
-import com.itacademy.cliagenda.note.model.Task;
+import com.itacademy.cliagenda.task.model.Task;
 import org.junit.jupiter.api.*;
 import java.io.*;
 import java.sql.*;
@@ -139,8 +139,8 @@ class TestNotesService {
     }
 
     @Test
-    void testExtractDatabase() {
-        List<Note> notes = notesService.extractDatabase();
+    void testExtractDatabaseNotesTable() {
+        List<Note> notes = notesService.extractDatabaseNotesTable();
         
         assertNotNull(notes);
         assertTrue(notes.size() >= 3, "Should have at least 3 notes from schema");
