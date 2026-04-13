@@ -4,6 +4,7 @@ import com.itacademy.cliagenda.infrastructure.sql.dao.NotesDao;
 import com.itacademy.cliagenda.note.model.Note;
 import com.itacademy.cliagenda.note.repository.NotesRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,7 +19,13 @@ public class NotesService {
         repo.addNotes(dao.findAll());
     }
 
-    
+    public List<Note> extractDatabaseNotesTable(){
+        return dao.findAll();
+    }
+
+    Note createNoteAllParams(int id, String body, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int task_fk){
+        return new Note(id, body, creationDate, lastUpdateDate, task_fk);
+    }
 
     Note createNote(int id, String body){
         return new Note(id, body);

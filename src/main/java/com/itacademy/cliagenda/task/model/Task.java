@@ -41,6 +41,8 @@ public class Task {
         return lastUpdateDate;
     }
 
+    //Descomentar cuando se una a la clase Event
+    /*
     public void setEvent_fk(Event event) {
         try{
             if (event.getId() < 0) {
@@ -51,4 +53,5 @@ public class Task {
             System.err.println(e.getMessage());
         }
     }
+     */
 }
