@@ -58,7 +58,7 @@ class TestNotesService {
 
     private static void loadProperties() throws Exception {
         Properties props = new Properties();
-        try (InputStream input = TestNotesService.class.getClassLoader().getResourceAsStream("application.properties")) {
+        try (InputStream input = TestNotesService.class.getClassLoader().getResourceAsStream("com/itacademy/cliagenda/application/config/application.properties")) {
             if (input == null) {
                 throw new RuntimeException("No se pudo encontrar application.properties");
             }

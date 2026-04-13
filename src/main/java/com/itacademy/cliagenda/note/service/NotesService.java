@@ -25,7 +25,7 @@ public class NotesService {
 
     private void loadProperties() {
         this.props = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("com/itacademy/cliagenda/application/config/application.properties")) {
             if (input == null) {
                 throw new RuntimeException("No se pudo encontrar application.properties");
             }
