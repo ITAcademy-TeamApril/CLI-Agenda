@@ -1,32 +1,25 @@
--- Schema for CLI Agenda (simplified without FK constraints)
-
 SET FOREIGN_KEY_CHECKS = 0;
 
 CREATE TABLE IF NOT EXISTS events (
     id INT PRIMARY KEY,
     title VARCHAR(100),
     description VARCHAR(250),
-    creation_date DATETIME,
-    last_update_date DATETIME,
+    eventDate DATETIME,
     recurrent TINYINT,
-    task_fk INT
     );
 
 CREATE TABLE IF NOT EXISTS tasks (
     id INT PRIMARY KEY,
-    name VARCHAR(100),
-    task_date DATETIME,
-    creation_date DATETIME,
-    last_update_date DATETIME,
-    event_fk INT
+    body VARCHAR(100),
+    event_fk INT,
+    FOREIGN KEY (event_fk) REFERENCES events(id)
     );
 
 CREATE TABLE IF NOT EXISTS notes (
     id INT PRIMARY KEY,
     body VARCHAR(250),
-    creation_date DATETIME,
-    last_update_date DATETIME,
-    task_fk INT
+    task_fk INT,
+    FOREIGN KEY (task_fk) REFERENCES tasks(id)
     );
 
 SET FOREIGN_KEY_CHECKS = 1;
