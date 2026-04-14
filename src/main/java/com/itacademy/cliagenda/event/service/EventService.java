@@ -5,7 +5,7 @@ import com.itacademy.cliagenda.event.repository.EventRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class EventService {
     private final EventRepository repo;
@@ -37,6 +37,13 @@ public class EventService {
         return maxId + 1;
     }
 
+    public Event findEventById(int id) {
+        return repo.findEventById(id);
+    }
+
+    public void deleteEventById(int id) {
+        repo.removeEventById(id);
+    }
 
 
 }

@@ -1,17 +1,21 @@
 package com.itacademy.cliagenda.event.cli;
 
-import com.itacademy.cliagenda.common.utils.ConsoleUtils;
-
 import com.itacademy.cliagenda.event.model.Event;
 import com.itacademy.cliagenda.event.service.EventService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 public class EventCli {
 
+    private final EventService service;
     private final Scanner scanner = new Scanner(System.in);
+
+    public EventCli(EventService service) {
+        this.service = service;
+    }
 
     public void showMenu() {
         int option = -1;
@@ -27,25 +31,20 @@ public class EventCli {
             scanner.nextLine();
 
             switch (option) {
-                case (1):
-                    // TODO: createEvent()
+                case 1:
+                    createEvent();
                     break;
-                case (2):
-                    // TODO: listEvents()
+                case 2:
+                    listEvents();
                     break;
-                case (3):
-                    // TODO: findEvent()
+                case 3:
+                    findEvent();
                     break;
-                case (4):
-                    // TODO: deleteEvent()
+                case 4:
+                    deleteEvent();
                     break;
             }
         } while (option != 0);
-    private final EventService service;
-    private final Scanner scanner = new Scanner(System.in);
-
-    public EventCli(EventService service) {
-        this.service = service;
     }
 
     public void createEvent() {
@@ -62,5 +61,43 @@ public class EventCli {
 
         Event event = service.createEvent(title, description, dateTime, recurring);
         System.out.println("Event \"" + event.getTitle() + "\" created.");
+    }
+
+    public void listEvents() {
+        List<Event> events = service.getAllEvents();
+        if (events.isEmpty()) {
+            System.out.println("No events found.");
+            return;
+        }
+        for (Event event : events) {
+            System.out.println("ID: " + event.getIdEvent()
+                    + " | " + event.getTitle()
+                    + " | " + event.getDateTimeEvent()
+                    + " | Recurring: " + event.isRecurring());
+        }
+    }
+
+    public void findEvent() {
+        System.out.println("Introduce event ID:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        Event event = service.findEventById(id);
+        if (event == null) {
+            System.out.println("Event not found.");
+        } else {
+            System.out.println("ID: " + event.getIdEvent());
+            System.out.println("Title: " + event.getTitle());
+            System.out.println("Description: " + event.getDescription());
+            System.out.println("Date: " + event.getDateTimeEvent());
+            System.out.println("Recurring: " + event.isRecurring());
+        }
+    }
+
+    public void deleteEvent() {
+        System.out.println("Introduce event ID to delete:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        service.deleteEventById(id);
+        System.out.println("Event deleted.");
     }
 }
