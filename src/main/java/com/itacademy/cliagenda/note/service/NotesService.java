@@ -16,11 +16,11 @@ public class NotesService {
     public NotesService() {
         this.repo = new NotesRepository();
         this.dao = SqlDao.getInstance();
-        repo.addNotes(dao.findAll());
+        repo.addNotes(dao.findAllNotes());
     }
 
     public List<Note> extractDatabaseNotesTable(){
-        return dao.findAll();
+        return dao.findAllNotes();
     }
 
     Note createNoteAllParams(int id, String body, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int task_fk){
@@ -59,7 +59,7 @@ public class NotesService {
     }
 
     public void addNoteDB(Note note){
-        dao.save(note);
+        dao.saveNotes(note);
     }
 
 }
