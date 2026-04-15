@@ -1,0 +1,6 @@
+com\itacademy\cliagenda\application\AgendaApp.class
+com\itacademy\cliagenda\note\cli\NoteCli.class
+com\itacademy\cliagenda\task\cli\TaskCli.class
+com\itacademy\cliagenda\application\menu\AppMenu.class
+com\itacademy\cliagenda\event\cli\EventCli.class
+com\itacademy\cliagenda\common\utils\ConsoleUtils.class
