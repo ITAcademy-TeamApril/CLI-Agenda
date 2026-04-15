@@ -32,14 +32,6 @@ public class NotesRepository {
         }
     }
 
-    public void removeLastNote() {
-        if (!notes.isEmpty()) {
-            notes.remove(notes.size() - 1);
-        } else {
-            System.out.println("No hay notas para eliminar.");
-        }
-    }
-
     public void removeNoteById(int id) {
         Note noteToRemove = null;
         for (Note note : notes) {
