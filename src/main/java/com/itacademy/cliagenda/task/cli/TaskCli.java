@@ -1,12 +1,20 @@
 package com.itacademy.cliagenda.task.cli;
 
-import com.itacademy.cliagenda.common.utils.ConsoleUtils;
+import com.itacademy.cliagenda.task.model.Task;
+import com.itacademy.cliagenda.task.service.TaskService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class TaskCli {
 
+    private final TaskService service;
     private final Scanner scanner = new Scanner(System.in);
+
+    public TaskCli(TaskService service) {
+        this.service = service;
+    }
 
     public void showMenu() {
         int option = -1;
@@ -23,6 +31,7 @@ public class TaskCli {
 
             switch (option) {
                 case (1):
+                    createTask();
                     // TODO: createTask()
                     break;
                 case (2):
@@ -36,5 +45,18 @@ public class TaskCli {
                     break;
             }
         } while (option != 0);
+    }
+
+    public void createTask() {
+
+        System.out.println("Introduce task");
+        String name = scanner.nextLine();
+        System.out.println("Introduce task date Time");
+        String dateText = scanner.nextLine();
+        LocalDateTime dateTime = LocalDateTime.parse(dateText,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+        Task task = new Task();
+
     }
 }

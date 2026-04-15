@@ -11,27 +11,34 @@ import java.util.Scanner;
 public class TaskService {
 
     private TaskRepository repo;
-    private SqlDao dao;
+    //private SqlDao dao;
 
-    public TaskService() {
-        this.repo = new TaskRepository();
-        this.dao = SqlDao.getInstance();
-        repo.addTasks(dao.findAllTasks());
+    public TaskService(TaskRepository repo) {
+        this.repo = repo;
+        //this.dao = SqlDao.getInstance();
+        //repo.addTasks(dao.findAllTasks());
     }
 
-    public List<Task> extractDatabaseTasksTable(){
-        return dao.findAllTasks();
+    Task createTask(String name, LocalDateTime taskDate) {
+        int id = generateNextId();
+        Task newTask = new Task(id, name, taskDate);
+        repo.addIndividualTask(newTask);
+        return newTask;
     }
 
-    Task createTask(int id, String name, LocalDateTime taskDate){
-        return new Task(id, name, taskDate);
+    public List<Task> getAllTasks() {
+        return repo.getTasks();
     }
 
-    Task createTaskAllParams(int id, String name, LocalDateTime taskDate, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int event_fk){
-        return new Task(id, name, taskDate, creationDate, lastUpdateDate, event_fk);
+    public Task findTaskById(int id) {
+        return repo.getTaskById(id);
     }
 
-    int checkTaskId(){
+    public void deleteTaskById(int id) {
+        repo.removeTaskById(id);
+    }
+
+    int generateNextId() {
         List<Task> tasks = repo.getTasks();
         if (tasks.isEmpty()) {
             return 0;
@@ -45,21 +52,22 @@ public class TaskService {
         return maxId;
     }
 
-    public void addTask(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Introduce el nombre de la tarea:");
-        String name = scanner.nextLine();
-        
-        int id = checkTaskId() + 1;
-        Task task = createTask(id, name, LocalDateTime.now());
-        
-        addTaskDB(task);
-        repo.addIndividualTask(task);
-        System.out.println("Tarea añadida con ID: " + id);
+    /*
+    public List<Task> extractDatabaseTasksTable(){
+        return dao.findAllTasks();
     }
+    */
 
+    /*
     public void addTaskDB(Task task){
         dao.saveTask(task);
     }
+    */
+
+    /*
+    Task createTaskAllParams(int id, String name, LocalDateTime taskDate, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int event_fk) {
+        return new Task(id, name, taskDate, creationDate, lastUpdateDate, event_fk);
+    }
+    */
 
 }

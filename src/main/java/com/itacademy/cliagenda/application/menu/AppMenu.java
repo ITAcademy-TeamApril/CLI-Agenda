@@ -5,6 +5,8 @@ import com.itacademy.cliagenda.event.repository.EventRepository;
 import com.itacademy.cliagenda.event.service.EventService;
 import com.itacademy.cliagenda.task.cli.TaskCli;
 import com.itacademy.cliagenda.note.cli.NoteCli;
+import com.itacademy.cliagenda.task.repository.TaskRepository;
+import com.itacademy.cliagenda.task.service.TaskService;
 
 import java.util.Scanner;
 
@@ -16,6 +18,10 @@ public class AppMenu {
     EventRepository eventRepo = new EventRepository();
     EventService eventService = new EventService(eventRepo);
     EventCli eventCli = new EventCli(eventService);
+
+    TaskRepository taskRepo = new TaskRepository();git add 
+    TaskService taskService = new TaskService(taskRepo);
+    TaskCli taskCli = new TaskCli(taskService);
 
     TaskCli taskCli = new TaskCli();
     NoteCli noteCli = new NoteCli();
