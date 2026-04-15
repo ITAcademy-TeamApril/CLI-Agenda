@@ -61,8 +61,7 @@ public class NoteCli {
         }
         for (Note note : notes)
             System.out.println("ID: " + note.getId()
-                    + " | " + note.getBody()
-                    + " | " + note.getCreationDate());
+                    + " | " + note.getBody());
     }
 
     public void findNote() {
