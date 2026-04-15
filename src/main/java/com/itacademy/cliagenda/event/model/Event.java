@@ -44,24 +44,25 @@ public class Event {
 
     public void changeTitle(String title) {
         try {
-            if (title == null) throw new  IllegalArgumentException("Title can't be null");
+            if (title == null) throw new IllegalArgumentException("Title can't be null");
             if (title.length() >= 100) throw new IllegalArgumentException("Title must be shorter than 100 characters");
             this.title = title;
-        } catch(Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
     public void changeDescription(String description) {
         try {
-            if (description != null && description.length() >= 500) throw new IllegalArgumentException("Description must be shorter than 500 characters");
+            if (description != null && description.length() >= 500)
+                throw new IllegalArgumentException("Description must be shorter than 500 characters");
             this.description = description;
-        } catch(Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
-    public void changeDateEvent(LocalDateTime datetime){
-        this.dateTimeEvent=datetime;
+    public void changeDateEvent(LocalDateTime datetime) {
+        this.dateTimeEvent = datetime;
     }
 }

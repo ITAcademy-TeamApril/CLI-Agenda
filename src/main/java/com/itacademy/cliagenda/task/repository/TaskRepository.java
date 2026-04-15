@@ -1,13 +1,12 @@
 package com.itacademy.cliagenda.task.repository;
 
-import com.itacademy.cliagenda.note.model.Note;
 import com.itacademy.cliagenda.task.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskRepository {
-    private List<Task> tasks;
+    private final List<Task> tasks;
 
     public TaskRepository(List<Task> tasks) {
         this.tasks = new ArrayList<>();
@@ -27,6 +26,7 @@ public class TaskRepository {
             this.tasks.addAll(tasks);
         }
     }
+
     public void addIndividualTask(Task task) {
         if (task != null) {
             this.tasks.add(task);
@@ -47,7 +47,8 @@ public class TaskRepository {
             System.out.println("No se encontró ninguna nota con el ID: " + id);
         }
     }
-    public Task getTaskById(int id){
+
+    public Task getTaskById(int id) {
         for (Task task : tasks) {
             if (task.getId() == id) {
                 return task;
@@ -55,7 +56,8 @@ public class TaskRepository {
         }
         return null;
     }
-    public List<Task> getTaskByEventFK(int event_fk){
+
+    public List<Task> getTaskByEventFK(int event_fk) {
         List<Task> result = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getEvent_fk() == event_fk) {

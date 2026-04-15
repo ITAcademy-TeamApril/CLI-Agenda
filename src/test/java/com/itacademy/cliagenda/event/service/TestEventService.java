@@ -2,52 +2,87 @@ package com.itacademy.cliagenda.event.service;
 
 import com.itacademy.cliagenda.event.model.Event;
 import com.itacademy.cliagenda.event.repository.EventRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.itacademy.cliagenda.testing.TestContainerManager;
+import org.junit.jupiter.api.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestEventService {
 
-    private EventRepository repo;
     private EventService service;
+    private EventRepository repo;
+
+    @BeforeAll
+    static void setUpAll() throws Exception {
+        TestContainerManager.ensureRunning();
+    }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+        TestContainerManager.clearAllTables();
         repo = new EventRepository();
         service = new EventService(repo);
     }
 
     @Test
     void testGetAllEventsEmpty() {
-        assertTrue(service.getAllEvents().isEmpty());
+        List<Event> events = service.getAllEvents();
+        assertNotNull(events);
+        assertTrue(events.isEmpty());
     }
 
     @Test
-    void testGetAllEventsAfterSave() {
-        repo.save(new Event(1, "Desc", "Títol", false));
-        assertEquals(1, service.getAllEvents().size());
+    void testCreateEvent() {
+        LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
+        Event event = service.createEvent("Nuevo evento", "Descripcion", dateTime, false);
+        
+        assertNotNull(event);
+        assertEquals("Nuevo evento", event.getTitle());
+        
+        List<Event> events = service.getAllEvents();
+        assertEquals(1, events.size());
     }
 
     @Test
-    void testCheckEventIdEmpty() {
-        assertEquals(0, service.checkEventId());
+    void testDeleteEventById() {
+        LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
+        Event event = service.createEvent("Evento para borrar", "Descripcion", dateTime, false);
+        
+        service.deleteEventById(event.getId());
+        
+        assertNull(service.findEventById(event.getId()));
     }
 
     @Test
-    void testCheckEventIdWithEvents() {
-        repo.save(new Event(1, "Desc1", "Títol1", false));
-        repo.save(new Event(5, "Desc2", "Títol2", true));
-        repo.save(new Event(3, "Desc3", "Títol3", false));
-        assertEquals(5, service.checkEventId());
+    void testUpdateEvent() {
+        LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
+        Event event = service.createEvent("Evento original", "Descripcion", dateTime, false);
+        
+        event.changeTitle("Evento actualizado");
+        service.updateEvent(event);
+        
+        Event updated = service.findEventById(event.getId());
+        assertNotNull(updated);
+        assertEquals("Evento actualizado", updated.getTitle());
     }
 
     @Test
-    void testCheckEventIdReturnsMax() {
-        repo.save(new Event(10, "Desc", "Títol", false));
-        repo.save(new Event(2, "Desc", "Títol", false));
-        assertEquals(10, service.checkEventId());
+    void testFindEventById() {
+        LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
+        Event event = service.createEvent("Evento buscado", "Descripcion", dateTime, false);
+        
+        Event found = service.findEventById(event.getId());
+        
+        assertNotNull(found);
+        assertEquals("Evento buscado", found.getTitle());
+    }
+
+    @Test
+    void testFindEventByIdNotFound() {
+        Event event = service.findEventById(999);
+        assertNull(event);
     }
 }

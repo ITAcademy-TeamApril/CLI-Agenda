@@ -2,6 +2,7 @@ package com.itacademy.cliagenda.event.service;
 
 import com.itacademy.cliagenda.event.model.Event;
 import com.itacademy.cliagenda.event.repository.EventRepository;
+import com.itacademy.cliagenda.infrastructure.sql.dao.SqlDao;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,15 +10,22 @@ import java.util.List;
 
 public class EventService {
     private final EventRepository repo;
+    private final SqlDao dao;
 
     public EventService(EventRepository repo) {
         this.repo = repo;
+        this.dao = SqlDao.getInstance();
+        List<Event> eventsFromDb = dao.findAllEvents();
+        for (Event event : eventsFromDb) {
+            repo.save(event);
+        }
     }
 
     public Event createEvent(String title, String description,
                              LocalDateTime dateTime, boolean recurring) {
         int idEvent = generateNextId();
-        Event newEvent = new Event(idEvent, description, title, dateTime, recurring);
+        Event newEvent = new Event(idEvent, title, description, dateTime, recurring);
+        dao.saveEvents(newEvent);
         repo.save(newEvent);
         return newEvent;
     }
@@ -42,8 +50,14 @@ public class EventService {
     }
 
     public void deleteEventById(int id) {
+        dao.deleteEvent(id);
         repo.removeEventById(id);
     }
 
+    public void updateEvent(Event event) {
+        dao.updateEvent(event);
+        repo.removeEventById(event.getId());
+        repo.save(event);
+    }
 
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotesRepository {
-    private List<Note> notes;
+    private final List<Note> notes;
 
     public NotesRepository(List<Note> Notes) {
         this.notes = new ArrayList<>();
@@ -26,6 +26,7 @@ public class NotesRepository {
             this.notes.addAll(Notes);
         }
     }
+
     public void addIndividualNote(Note note) {
         if (note != null) {
             this.notes.add(note);
@@ -46,7 +47,8 @@ public class NotesRepository {
             System.out.println("No se encontró ninguna nota con el ID: " + id);
         }
     }
-    public Note getNoteById(int id){
+
+    public Note getNoteById(int id) {
         for (Note note : notes) {
             if (note.getId() == id) {
                 return note;
@@ -54,7 +56,8 @@ public class NotesRepository {
         }
         return null;
     }
-    public List<Note> getNotesByTaskFK(int task_fk){
+
+    public List<Note> getNotesByTaskFK(int task_fk) {
         List<Note> result = new ArrayList<>();
         for (Note note : notes) {
             if (note.getTask_fk() == task_fk) {

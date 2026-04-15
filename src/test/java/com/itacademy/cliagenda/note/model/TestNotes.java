@@ -8,32 +8,26 @@ class TestNotes {
 
     @Test
     void testGetId() {
-        Note nota = new Note(1, "Cuerpo de prueba");
+        Note nota = new Note(1, "Cuerpo de prueba", 1);
         assertEquals(1, nota.getId());
     }
 
     @Test
     void testGetBody() {
-        Note nota = new Note(1, "Cuerpo de prueba");
+        Note nota = new Note(1, "Cuerpo de prueba", 1);
         assertEquals("Cuerpo de prueba", nota.getBody());
     }
 
     @Test
-    void testGetCreationDate() {
-        Note nota = new Note(1, "Cuerpo de prueba");
-        assertNotNull(nota.getCreationDate());
-    }
-
-    @Test
     void testChangeBodyValido() {
-        Note nota = new Note(1, "Cuerpo original");
+        Note nota = new Note(1, "Cuerpo original", 1);
         nota.changeBody("Cuerpo actualizado");
         assertEquals("Cuerpo actualizado", nota.getBody());
     }
 
     @Test
     void testChangeBodyExcedeLongitud() {
-        Note nota = new Note(1, "Cuerpo original");
+        Note nota = new Note(1, "Cuerpo original", 1);
         String bodyLargo = "a".repeat(251);
         nota.changeBody(bodyLargo);
         assertEquals("Cuerpo original", nota.getBody());
@@ -41,103 +35,78 @@ class TestNotes {
 
     @Test
     void testConstructorBodyValido() {
-        Note nota = new Note(1, "Cuerpo válido");
+        Note nota = new Note(1, "Cuerpo válido", 1);
         assertEquals("Cuerpo válido", nota.getBody());
     }
 
     @Test
     void testConstructorBodyNulo() {
-        Note nota = new Note(1, null);
+        Note nota = new Note(1, null, 0);
         assertNull(nota.getBody());
     }
 
     @Test
     void testConstructorBodyExcedeLongitud() {
         String bodyLargo = "a".repeat(251);
-        Note nota = new Note(1, bodyLargo);
+        Note nota = new Note(1, bodyLargo, 1);
         assertNull(nota.getBody());
     }
 
     @Test
     void testChangeBodyNull() {
-        Note nota = new Note(1, "Cuerpo original");
+        Note nota = new Note(1, "Cuerpo original", 1);
         nota.changeBody(null);
         assertNull(nota.getBody());
     }
 
     @Test
-    void testGetLastUpdateDate() {
-        Note nota = new Note(1, "Cuerpo original");
-        assertNotNull(nota.getLastUpdateDate());
+    void testGetTask_fk() {
+        Note nota = new Note(1, "Cuerpo de prueba", 5);
+        assertEquals(5, nota.getTask_fk());
     }
 
     @Test
-    void testGetTask_fk() {
-        Note nota = new Note(1, "Cuerpo de prueba");
+    void testGetTask_fkDefault() {
+        Note nota = new Note(1, "Cuerpo de prueba", 0);
         assertEquals(0, nota.getTask_fk());
     }
 
     @Test
     void testSetTask_fkValido() {
-        Note nota = new Note(1, "Cuerpo de prueba");
-        java.time.LocalDateTime taskDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
-        Task task = new Task(5, "Evento prueba", taskDate);
+        Note nota = new Note(1, "Cuerpo de prueba", 0);
+        Task task = new Task(5, "Tarea prueba");
         nota.setTask_fk(task);
         assertEquals(5, nota.getTask_fk());
     }
 
     @Test
     void testSetTask_fkNegativo() {
-        Note nota = new Note(1, "Cuerpo de prueba");
-        java.time.LocalDateTime taskDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
-        nota.setTask_fk(new Task(5, "Tarea prueba", taskDate));
-        nota.setTask_fk(new Task(-1, "Tarea negativa", taskDate));
+        Note nota = new Note(1, "Cuerpo de prueba", 0);
+        Task task = new Task(5, "Tarea prueba");
+        nota.setTask_fk(task);
+        nota.setTask_fk(new Task(-1, "Tarea negativa"));
         assertEquals(5, nota.getTask_fk());
     }
 
     @Test
     void testSetTask_fkCero() {
-        Note nota = new Note(1, "Cuerpo de prueba");
-        java.time.LocalDateTime taskDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
-        nota.setTask_fk(new Task(0, "Tarea cero", taskDate));
+        Note nota = new Note(1, "Cuerpo de prueba", 0);
+        nota.setTask_fk(new Task(0, "Tarea cero"));
         assertEquals(0, nota.getTask_fk());
     }
 
     @Test
-    void testConstructorFullParams() {
-        java.time.LocalDateTime creationDate = java.time.LocalDateTime.of(2024, 1, 1, 10, 0);
-        java.time.LocalDateTime lastUpdateDate = java.time.LocalDateTime.of(2024, 1, 2, 12, 0);
-        Note nota = new Note(1, "Cuerpo válido", creationDate, lastUpdateDate, 5);
+    void testConstructorWithTaskObject() {
+        Task task = new Task(5, "Tarea prueba");
+        Note nota = new Note(1, "Cuerpo", task);
         
-        assertEquals(1, nota.getId());
-        assertEquals("Cuerpo válido", nota.getBody());
-        assertEquals(creationDate.toString(), nota.getCreationDate());
-        assertEquals(lastUpdateDate, nota.getLastUpdateDate());
         assertEquals(5, nota.getTask_fk());
     }
 
     @Test
-    void testLastUpdateDateActualizado() {
-        Note nota = new Note(1, "Cuerpo original");
-        java.time.LocalDateTime fechaAntes = nota.getLastUpdateDate();
-        
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        
-        nota.changeBody("Cuerpo actualizado");
-        java.time.LocalDateTime fechaDespues = nota.getLastUpdateDate();
-        
-        assertNotNull(fechaDespues);
-        assertTrue(fechaDespues.isAfter(fechaAntes) || fechaDespues.isEqual(fechaAntes));
-    }
-
-    @Test
-    void testLastUpdateDateNoNuloTrasChangeBody() {
-        Note nota = new Note(1, "Cuerpo original");
-        nota.changeBody("Cuerpo actualizado");
-        assertNotNull(nota.getLastUpdateDate());
+    void testSetTaskWithNullDoesNotThrow() {
+        Note nota = new Note(1, "Cuerpo", 1);
+        Task task = null;
+        nota.setTask_fk(task);
     }
 }

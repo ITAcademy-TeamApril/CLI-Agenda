@@ -17,7 +17,7 @@ public class SqlDao {
     private static final SqlDao INSTANCE = new SqlDao();
     private Properties props;
 
-    //////////////////////////////// SQL Connection Methods
+    /// ///////////////////////////// SQL Connection Methods
 
     private SqlDao() {
         loadProperties();
@@ -42,13 +42,13 @@ public class SqlDao {
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
-            props.getProperty("jdbc.url"),
-            props.getProperty("jdbc.username"),
-            props.getProperty("jdbc.password")
+                props.getProperty("jdbc.url"),
+                props.getProperty("jdbc.username"),
+                props.getProperty("jdbc.password")
         );
     }
 
-    ////////////////////////////////
+    /// /////////////////////////////
 
     public List<Note> findAllNotes() {
         List<Note> notes = new ArrayList<>();
@@ -79,7 +79,7 @@ public class SqlDao {
 
             pstmt.setInt(1, note.getId());
             pstmt.setString(2, note.getBody());
-            pstmt.setInt(5, note.getTask_fk());
+            pstmt.setInt(3, note.getTask_fk());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -116,7 +116,7 @@ public class SqlDao {
 
             pstmt.setInt(1, task.getId());
             pstmt.setString(2, task.getBody());
-            pstmt.setInt(5, task.getEvent_fk());
+            pstmt.setInt(3, task.getEvent_fk());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -126,7 +126,7 @@ public class SqlDao {
 
     public List<Event> findAllEvents() {
         List<Event> events = new ArrayList<>();
-        String query = "SELECT id, title, description, eventDate, recurring FROM events";
+        String query = "SELECT id, title, description, eventDate, recurrent FROM events";
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
@@ -148,7 +148,7 @@ public class SqlDao {
     }
 
     public void saveEvents(Event event) {
-        String query = "INSERT INTO notes (id, title, description, eventDate, recurring) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO events (id, title, description, eventDate, recurrent) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -157,11 +157,100 @@ public class SqlDao {
             pstmt.setString(2, event.getTitle());
             pstmt.setString(3, event.getDescription());
             pstmt.setTimestamp(4, Timestamp.valueOf(event.getDateTimeEvent()));
-            pstmt.setBoolean(6, event.isRecurring());
+            pstmt.setBoolean(5, event.isRecurring());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al insertar nota en la base de datos: " + e.getMessage());
+            System.err.println("Error al insertar evento en la base de datos: " + e.getMessage());
+        }
+    }
+
+    public void deleteNote(int id) {
+        String query = "DELETE FROM notes WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar nota de la base de datos: " + e.getMessage());
+        }
+    }
+
+    public void updateNote(Note note) {
+        String query = "UPDATE notes SET body = ?, task_fk = ? WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, note.getBody());
+            pstmt.setInt(2, note.getTask_fk());
+            pstmt.setInt(3, note.getId());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar nota en la base de datos: " + e.getMessage());
+        }
+    }
+
+    public void deleteTask(int id) {
+        String query = "DELETE FROM tasks WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar tarea de la base de datos: " + e.getMessage());
+        }
+    }
+
+    public void updateTask(Task task) {
+        String query = "UPDATE tasks SET body = ?, event_fk = ? WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, task.getBody());
+            pstmt.setInt(2, task.getEvent_fk());
+            pstmt.setInt(3, task.getId());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar tarea en la base de datos: " + e.getMessage());
+        }
+    }
+
+    public void deleteEvent(int id) {
+        String query = "DELETE FROM events WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar evento de la base de datos: " + e.getMessage());
+        }
+    }
+
+    public void updateEvent(Event event) {
+        String query = "UPDATE events SET title = ?, description = ?, eventDate = ?, recurrent = ? WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, event.getTitle());
+            pstmt.setString(2, event.getDescription());
+            pstmt.setTimestamp(3, Timestamp.valueOf(event.getDateTimeEvent()));
+            pstmt.setBoolean(4, event.isRecurring());
+            pstmt.setInt(5, event.getId());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar evento en la base de datos: " + e.getMessage());
         }
     }
 }

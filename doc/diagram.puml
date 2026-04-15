@@ -1,0 +1,220 @@
+@startuml CLI-Agenda
+
+!theme plain
+
+skinparam packageStyle rectangle
+skinparam backgroundColor #f5f5f5
+
+' ==================== PACKAGES ====================
+
+package "com.itacademy.cliagenda.application" {
+    class AgendaApp {
+        + main(args: String[])
+    }
+    class AppMenu {
+        + showMainMenu()
+    }
+}
+
+package "com.itacademy.cliagenda.note" #e3f2fd {
+    class Note {
+        - id: int
+        - body: String
+        - task_fk: int
+        + Note(id, body, taskFk)
+        + getId(): int
+        + getBody(): String
+        + changeBody(body: String)
+        + getTask_fk(): int
+        + setTask_fk(task: Task)
+    }
+    class NotesRepository {
+        - notes: List<Note>
+        + getNotes(): List<Note>
+        + addNotes(notes: List<Note>)
+        + addIndividualNote(note: Note)
+        + removeNoteById(id: int)
+        + getNoteById(id: int): Note
+        + getNotesByTaskFK(taskFk: int): List<Note>
+    }
+    class NotesService {
+        - repo: NotesRepository
+        - dao: SqlDao
+        + NotesService(repo)
+        + createNote(body: String): Note
+        + createNote(body: String, task: Task): Note
+        + getAllNotes(): List<Note>
+        + deleteNoteById(id: int)
+        + updateNote(note: Note)
+        + findNoteById(id: int): Note
+    }
+    class NoteCli {
+        + showMenu()
+        + createNote()
+        + listNotes()
+        + findNote()
+        + deleteNote()
+    }
+}
+
+package "com.itacademy.cliagenda.task" #e8f5e8 {
+    class Task {
+        - id: int
+        - body: String
+        - event_fk: int
+        + Task(id, body, eventFk)
+        + getId(): int
+        + getBody(): String
+        + changeBody(body: String)
+        + getEvent_fk(): int
+        + setEvent_fk(event: Event)
+    }
+    class TaskRepository {
+        - tasks: List<Task>
+        + getTasks(): List<Task>
+        + addTasks(tasks: List<Task>)
+        + addIndividualTask(task: Task)
+        + removeTaskById(id: int)
+        + getTaskById(id: int): Task
+        + getTaskByEventFK(eventFk: int): List<Task>
+    }
+    class TaskService {
+        - repo: TaskRepository
+        - dao: SqlDao
+        + TaskService(repo)
+        + createTask(body: String): Task
+        + createTask(body: String, event: Event): Task
+        + getAllTasks(): List<Task>
+        + deleteTaskById(id: int)
+        + updateTask(task: Task)
+        + findTaskById(id: int): Task
+    }
+    class TaskCli {
+        + showMenu()
+        + createTask()
+        + listTasks()
+        + findTask()
+        + deleteTask()
+    }
+}
+
+package "com.itacademy.cliagenda.event" #fff3e0 {
+    class Event {
+        - id: int
+        - title: String
+        - description: String
+        - eventDate: LocalDateTime
+        - recurring: boolean
+        + Event(id, title, description, dateTime, recurring)
+        + getId(): int
+        + getTitle(): String
+        + changeTitle(title: String)
+        + getDescription(): String
+        + changeDescription(description: String)
+        + getDateTimeEvent(): LocalDateTime
+        + changeDateEvent(dateTime: LocalDateTime)
+        + isRecurring(): boolean
+        + setRecurring(recurring: boolean)
+    }
+    class EventRepository {
+        - events: List<Event>
+        + getAllEvents(): List<Event>
+        + save(event: Event)
+        + removeEventById(id: int)
+        + findEventById(id: int): Event
+    }
+    class EventService {
+        - repo: EventRepository
+        - dao: SqlDao
+        + EventService(repo)
+        + createEvent(title, description, dateTime, recurring): Event
+        + getAllEvents(): List<Event>
+        + deleteEventById(id: int)
+        + updateEvent(event: Event)
+        + findEventById(id: int): Event
+    }
+    class EventCli {
+        + showMenu()
+        + createEvent()
+        + listEvents()
+        + findEvent()
+        + deleteEvent()
+    }
+}
+
+package "com.itacademy.cliagenda.infrastructure.sql" #fce4ec {
+    class SqlDao {
+        - connection: Connection
+        - instance: SqlDao
+        + getInstance(): SqlDao <<singleton>>
+        + findAllNotes(): List<Note>
+        + saveNotes(note: Note)
+        + updateNote(note: Note)
+        + deleteNote(id: int)
+        + findAllTasks(): List<Task>
+        + saveTask(task: Task)
+        + updateTask(task: Task)
+        + deleteTask(id: int)
+        + findAllEvents(): List<Event>
+        + saveEvents(event: Event)
+        + updateEvent(event: Event)
+        + deleteEvent(id: int)
+    }
+}
+
+package "com.itacademy.cliagenda.common.utils" {
+    class ConsoleUtils {
+        + readString(): String
+        + readInt(): int
+    }
+}
+
+package "com.itacademy.cliagenda.testing" #e0e0e0 {
+    class TestContainerManager {
+        + ensureRunning()
+        + getConnection(): Connection
+        + clearAllTables()
+        + cleanup()
+    }
+}
+
+' ==================== RELATIONSHIPS ====================
+
+' Application relations
+AgendaApp --> AppMenu : creates
+AppMenu --> NoteCli : uses
+AppMenu --> TaskCli : uses
+AppMenu --> EventCli : uses
+
+' Note relationships
+NotesService --> NotesRepository : uses
+NotesService --> SqlDao : uses
+NotesService --> Note : creates/manages
+NotesRepository --> Note : stores
+NoteCli --> NotesService : uses
+
+' Task relationships
+TaskService --> TaskRepository : uses
+TaskService --> SqlDao : uses
+TaskService --> Task : creates/manages
+TaskRepository --> Task : stores
+TaskCli --> TaskService : uses
+
+' Event relationships
+EventService --> EventRepository : uses
+EventService --> SqlDao : uses
+EventService --> Event : creates/manages
+EventRepository --> Event : stores
+EventCli --> EventService : uses
+
+' Cross-package relationships
+Note --> Task : references (task_fk)
+Task --> Event : references (event_fk)
+
+' Note: Services have similar methods but don't inherit from each other
+' All implement the same CRUD pattern (create, read, update, delete)
+
+' Singleton
+ SqlDao .. SqlDao : <<singleton>>
+
+@enduml
