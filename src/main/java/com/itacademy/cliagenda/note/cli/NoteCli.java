@@ -49,8 +49,10 @@ public class NoteCli {
     public void createNote() {
         System.out.println("Introduce note body:");
         String body = scanner.nextLine();
-        Note note = service.createNote(body);
-        System.out.println("Note created with ID: " + note.getId());
+        System.out.println("Introduce \"task ID\" to link this note to:");
+        int idTaskForThisNote = scanner.nextInt();
+        Note note = service.createNote(body, idTaskForThisNote);
+        System.out.println("Note created with ID: " + note.getId() + " linked to task with ID #" + idTaskForThisNote );
     }
 
     public void listNotes() {

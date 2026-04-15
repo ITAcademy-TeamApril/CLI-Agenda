@@ -18,9 +18,9 @@ public class NotesService {
         //repo.addNotes(dao.findAll());
     }
 
-    public Note createNote(String body) {
+    public Note createNote(String body, int task_fk) {
         int id = generateNextId();
-        Note newNote = new Note(id, body);
+        Note newNote = new Note(id, body, task_fk);
         repo.addIndividualNote(newNote);
         return newNote;
     }
