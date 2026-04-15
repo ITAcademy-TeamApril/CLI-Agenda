@@ -75,7 +75,7 @@ public class NoteCli {
         } else {
             System.out.println("ID: " + note.getId());
             System.out.println("Body: " + note.getBody());
-            System.out.println("Created: " + note.getCreationDate());
+            //System.out.println("Created: " + note.getCreationDate());
         }
 
     }
