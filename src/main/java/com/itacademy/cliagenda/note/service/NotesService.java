@@ -3,6 +3,7 @@ package com.itacademy.cliagenda.note.service;
 import com.itacademy.cliagenda.infrastructure.sql.dao.SqlDao;
 import com.itacademy.cliagenda.note.model.Note;
 import com.itacademy.cliagenda.note.repository.NotesRepository;
+import com.itacademy.cliagenda.task.model.Task;
 
 
 import java.util.List;
@@ -18,9 +19,9 @@ public class NotesService {
         //repo.addNotes(dao.findAll());
     }
 
-    public Note createNote(String body) {
+    public Note createNote(String body, Task task_fk) {
         int id = generateNextId();
-        Note newNote = new Note(id, body);
+        Note newNote = new Note(id, body, task_fk);
         repo.addIndividualNote(newNote);
         return newNote;
     }

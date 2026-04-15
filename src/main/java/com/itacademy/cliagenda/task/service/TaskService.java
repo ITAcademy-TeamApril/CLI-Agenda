@@ -18,9 +18,9 @@ public class TaskService {
         //repo.addTasks(dao.findAllTasks());
     }
 
-    public Task createTask(String name, LocalDateTime taskDate) {
+    public Task createTask(String body) {
         int id = generateNextId();
-        Task newTask = new Task(id, name, taskDate);
+        Task newTask = new Task(id, body);
         repo.addIndividualTask(newTask);
         return newTask;
     }

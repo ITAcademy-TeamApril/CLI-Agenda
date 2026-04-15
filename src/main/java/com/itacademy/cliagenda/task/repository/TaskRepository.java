@@ -32,13 +32,6 @@ public class TaskRepository {
             this.tasks.add(task);
         }
     }
-    public void removeLastTask() {
-        if (!tasks.isEmpty()) {
-            tasks.remove(tasks.size() - 1);
-        } else {
-            System.out.println("No hay tareas para eliminar.");
-        }
-    }
 
     public void removeTaskById(int id) {
         Task taskToRemove = null;

@@ -50,14 +50,14 @@ public class TaskCli {
     public void createTask() {
 
         System.out.println("Introduce task");
-        String name = scanner.nextLine();
+        String body = scanner.nextLine();
         System.out.println("Introduce task date Time with format \"yyyy-MM-dd HH:mm\"");
         String dateText = scanner.nextLine();
         LocalDateTime dateTime = LocalDateTime.parse(dateText,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
-        Task task = service.createTask(name, dateTime);
-        System.out.println("Task \"" + task.getName() + "\" created.");
+        Task task = service.createTask(body);
+        System.out.println("Task \"" + task.getBody() + "\" created.");
 
     }
 
@@ -69,8 +69,7 @@ public class TaskCli {
         }
         for (Task task : tasks) {
             System.out.println("ID: " + task.getId()
-                    + " | " + task.getName()
-                    + " | " + task.getCreationDate());
+                    + " | " + task.getBody());
         }
     }
 
@@ -83,8 +82,7 @@ public class TaskCli {
             System.out.println("Task not found.");
         } else {
             System.out.println("ID: " + task.getId());
-            System.out.println("Name: " + task.getName());
-            System.out.println("Date: " + task.getCreationDate());
+            System.out.println("Name: " + task.getBody());
         }
     }
 
