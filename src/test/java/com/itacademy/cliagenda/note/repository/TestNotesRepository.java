@@ -1,6 +1,5 @@
 package com.itacademy.cliagenda.note.repository;
 
-import com.itacademy.cliagenda.task.model.Task;
 import com.itacademy.cliagenda.note.model.Note;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,13 +16,9 @@ class TestNotesRepository {
 
     @BeforeEach
     void setUp() {
-        note1 = new Note(1, "Nota 1");
-        note2 = new Note(2, "Nota 2");
-        note3 = new Note(3, "Nota 3");
-        java.time.LocalDateTime taskDate = java.time.LocalDateTime.of(2024, 6, 15, 10, 0);
-        note1.setTask_fk(new Task(1, "Evento 1", taskDate));
-        note2.setTask_fk(new Task(2, "Evento 2", taskDate));
-        note3.setTask_fk(new Task(1, "Evento 1", taskDate));
+        note1 = new Note(1, "Nota 1", 1);
+        note2 = new Note(2, "Nota 2", 1);
+        note3 = new Note(3, "Nota 3", 2);
         
         List<Note> notes = new ArrayList<>();
         notes.add(note1);
@@ -87,30 +82,6 @@ class TestNotesRepository {
     }
 
     @Test
-    void testRemoveLastNote() {
-        List<Note> notes = new ArrayList<>();
-        notes.add(note1);
-        notes.add(note2);
-        notes.add(note3);
-        repository = new NotesRepository(notes);
-        
-        repository.removeLastNote();
-        
-        assertEquals(2, repository.getNotes().size());
-        assertEquals(note2, repository.getNotes().get(1));
-    }
-
-    @Test
-    void testRemoveLastNoteEmptyList() {
-        List<Note> notes = new ArrayList<>();
-        repository = new NotesRepository(notes);
-        
-        repository.removeLastNote();
-        
-        assertEquals(0, repository.getNotes().size());
-    }
-
-    @Test
     void testRemoveNoteById() {
         List<Note> notes = new ArrayList<>();
         notes.add(note1);
@@ -159,7 +130,7 @@ class TestNotesRepository {
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(2, result.get(0).getTask_fk());
-        assertEquals("Nota 2", result.get(0).getBody());
+        assertEquals("Nota 3", result.get(0).getBody());
     }
 
     @Test
@@ -177,6 +148,13 @@ class TestNotesRepository {
         assertNotNull(result);
         assertEquals(2, result.size());
         assertTrue(result.contains(note1));
-        assertTrue(result.contains(note3));
+        assertTrue(result.contains(note2));
+    }
+
+    @Test
+    void testEmptyConstructor() {
+        repository = new NotesRepository();
+        assertNotNull(repository.getNotes());
+        assertTrue(repository.getNotes().isEmpty());
     }
 }

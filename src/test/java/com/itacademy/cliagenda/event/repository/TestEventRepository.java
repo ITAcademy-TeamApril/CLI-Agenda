@@ -4,6 +4,7 @@ import com.itacademy.cliagenda.event.model.Event;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestEventRepository {
 
     private EventRepository repo;
+    private final LocalDateTime defaultDate = LocalDateTime.of(2025, 6, 15, 10, 0);
 
     @BeforeEach
     void setUp() {
@@ -19,17 +21,17 @@ class TestEventRepository {
 
     @Test
     void testSaveEvent() {
-        Event event = new Event(1, "Desc", "Títol", false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
         repo.save(event);
         assertEquals(1, repo.getAllEvents().size());
     }
 
     @Test
     void testGetAllEventsReturnsACopy() {
-        Event event = new Event(1, "Desc", "Títol", false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
         repo.save(event);
         List<Event> events = repo.getAllEvents();
-        assertThrows(UnsupportedOperationException.class, () -> events.add(new Event(2, "Desc2", "Títol2", false)));
+        assertThrows(UnsupportedOperationException.class, () -> events.add(new Event(2, "Título2", "Descripción2", defaultDate, false)));
     }
 
     @Test
@@ -39,10 +41,10 @@ class TestEventRepository {
 
     @Test
     void testFindEventByIdFound() {
-        Event event = new Event(1, "Desc", "Títol", false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
         repo.save(event);
         Event found = repo.findEventById(1);
-        assertEquals(1, found.getIdEvent());
+        assertEquals(1, found.getId());
     }
 
     @Test
@@ -52,7 +54,7 @@ class TestEventRepository {
 
     @Test
     void testRemoveEventById() {
-        Event event = new Event(1, "Desc", "Títol", false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
         repo.save(event);
         repo.removeEventById(1);
         assertTrue(repo.getAllEvents().isEmpty());
@@ -60,7 +62,7 @@ class TestEventRepository {
 
     @Test
     void testRemoveEventByIdNotFound() {
-        Event event = new Event(1, "Desc", "Títol", false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
         repo.save(event);
         repo.removeEventById(99);
         assertEquals(1, repo.getAllEvents().size());
@@ -68,9 +70,9 @@ class TestEventRepository {
 
     @Test
     void testSaveMultipleEvents() {
-        repo.save(new Event(1, "Desc1", "Títol1", false));
-        repo.save(new Event(2, "Desc2", "Títol2", true));
-        repo.save(new Event(3, "Desc3", "Títol3", false));
+        repo.save(new Event(1, "Título1", "Descripción1", defaultDate, false));
+        repo.save(new Event(2, "Título2", "Descripción2", defaultDate, true));
+        repo.save(new Event(3, "Título3", "Descripción3", defaultDate, false));
         assertEquals(3, repo.getAllEvents().size());
     }
 }

@@ -3,7 +3,6 @@ package com.itacademy.cliagenda.note.cli;
 import com.itacademy.cliagenda.note.model.Note;
 import com.itacademy.cliagenda.note.service.NotesService;
 import com.itacademy.cliagenda.task.model.Task;
-import com.itacademy.cliagenda.task.repository.TaskRepository;
 import com.itacademy.cliagenda.task.service.TaskService;
 
 import java.util.List;
@@ -14,8 +13,6 @@ public class NoteCli {
     private final Scanner scanner = new Scanner(System.in);
     private final NotesService serviceNotes;
     private final TaskService serviceTask;
-
-
 
 
     public NoteCli(NotesService serviceNotes, TaskService taskService) {
@@ -61,7 +58,7 @@ public class NoteCli {
         int idTaskForThisNote = scanner.nextInt();
         Task taskTemp = serviceTask.findTaskById(idTaskForThisNote);
         Note note = serviceNotes.createNote(body, taskTemp);
-        System.out.println("Note created with ID: " + note.getId() + " linked to task with ID #" + idTaskForThisNote );
+        System.out.println("Note created with ID: " + note.getId() + " linked to task with ID #" + idTaskForThisNote);
     }
 
     public void listNotes() {

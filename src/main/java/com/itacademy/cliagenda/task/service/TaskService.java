@@ -1,26 +1,33 @@
 package com.itacademy.cliagenda.task.service;
 
+import com.itacademy.cliagenda.event.model.Event;
+import com.itacademy.cliagenda.infrastructure.sql.dao.SqlDao;
 import com.itacademy.cliagenda.task.model.Task;
 import com.itacademy.cliagenda.task.repository.TaskRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
 
 public class TaskService {
 
-    private TaskRepository repo;
-    //private SqlDao dao;
+    private final TaskRepository repo;
+    private final SqlDao dao;
 
     public TaskService(TaskRepository repo) {
         this.repo = repo;
-        //this.dao = SqlDao.getInstance();
-        //repo.addTasks(dao.findAllTasks());
+        this.dao = SqlDao.getInstance();
+        List<Task> tasksFromDb = dao.findAllTasks();
+        repo.addTasks(tasksFromDb);
     }
 
     public Task createTask(String body) {
+        return createTask(body, null);
+    }
+
+    public Task createTask(String body, Event event_fk) {
         int id = generateNextId();
-        Task newTask = new Task(id, body);
+        int eventFk = event_fk != null ? event_fk.getId() : 0;
+        Task newTask = new Task(id, body, eventFk);
+        dao.saveTask(newTask);
         repo.addIndividualTask(newTask);
         return newTask;
     }
@@ -34,7 +41,14 @@ public class TaskService {
     }
 
     public void deleteTaskById(int id) {
+        dao.deleteTask(id);
         repo.removeTaskById(id);
+    }
+
+    public void updateTask(Task task) {
+        dao.updateTask(task);
+        repo.removeTaskById(task.getId());
+        repo.addIndividualTask(task);
     }
 
     int generateNextId() {
@@ -47,23 +61,4 @@ public class TaskService {
         }
         return maxId + 1;
     }
-
-    /*
-    public List<Task> extractDatabaseTasksTable(){
-        return dao.findAllTasks();
-    }
-    */
-
-    /*
-    public void addTaskDB(Task task){
-        dao.saveTask(task);
-    }
-    */
-
-    /*
-    Task createTaskAllParams(int id, String name, LocalDateTime taskDate, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int event_fk) {
-        return new Task(id, name, taskDate, creationDate, lastUpdateDate, event_fk);
-    }
-    */
-
 }

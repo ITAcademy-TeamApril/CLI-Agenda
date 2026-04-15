@@ -2,10 +2,8 @@ package com.itacademy.cliagenda.task.model;
 
 import com.itacademy.cliagenda.event.model.Event;
 
-import java.time.LocalDateTime;
-
 public class Task {
-    private int Id;
+    private final int Id;
     private String body;
     private int event_fk;
 
@@ -17,7 +15,7 @@ public class Task {
     public Task(int id, String body, int event_fk) {
         Id = id;
         this.body = body;
-        this.event_fk=event_fk;
+        this.event_fk = event_fk;
     }
 
     //Usar este constructor para cuando haya que recrear los objetos Task desde la base de datos.
@@ -25,8 +23,8 @@ public class Task {
     public Task(int id, String body, Event event) {
         Id = id;
         this.body = body;
-        int event_fk=event.getId();
-        if (event_fk!=0){
+        int event_fk = event.getId();
+        if (event_fk != 0) {
             this.event_fk = event_fk;
         }
     }
@@ -39,7 +37,7 @@ public class Task {
         return body;
     }
 
-    public void changeBody(String body){
+    public void changeBody(String body) {
         try {
             if (body != null && body.length() > 250) {
                 throw new IllegalArgumentException("La petición de escribir una nota no se ha realizado por ser excesivamente largo.");
@@ -55,7 +53,7 @@ public class Task {
     }
 
     public void setEvent_fk(Event event) {
-        try{
+        try {
             if (event.getId() < 0) {
                 throw new IllegalArgumentException("El valor proporcionado para event_fk no es válido.");
             }

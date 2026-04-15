@@ -7,7 +7,7 @@ import java.util.List;
 
 public class EventRepository {
 
-    private List<Event> eventList = new ArrayList<>();
+    private final List<Event> eventList = new ArrayList<>();
 
     //SAVE EVENT
     public void save(Event event) {

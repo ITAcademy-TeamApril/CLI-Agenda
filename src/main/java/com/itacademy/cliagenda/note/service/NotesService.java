@@ -5,23 +5,29 @@ import com.itacademy.cliagenda.note.model.Note;
 import com.itacademy.cliagenda.note.repository.NotesRepository;
 import com.itacademy.cliagenda.task.model.Task;
 
-
 import java.util.List;
 
 public class NotesService {
 
     private final NotesRepository repo;
-    private SqlDao dao;
+    private final SqlDao dao;
 
     public NotesService(NotesRepository repo) {
         this.repo = repo;
-        //this.dao = SqlDao.getInstance();
-        //repo.addNotes(dao.findAll());
+        this.dao = SqlDao.getInstance();
+        List<Note> notesFromDb = dao.findAllNotes();
+        repo.addNotes(notesFromDb);
+    }
+
+    public Note createNote(String body) {
+        return createNote(body, null);
     }
 
     public Note createNote(String body, Task task_fk) {
         int id = generateNextId();
-        Note newNote = new Note(id, body, task_fk);
+        int taskFk = task_fk != null ? task_fk.getId() : 0;
+        Note newNote = new Note(id, body, taskFk);
+        dao.saveNotes(newNote);
         repo.addIndividualNote(newNote);
         return newNote;
     }
@@ -35,7 +41,14 @@ public class NotesService {
     }
 
     public void deleteNoteById(int id) {
+        dao.deleteNote(id);
         repo.removeNoteById(id);
+    }
+
+    public void updateNote(Note note) {
+        dao.updateNote(note);
+        repo.removeNoteById(note.getId());
+        repo.addIndividualNote(note);
     }
 
 
@@ -49,25 +62,4 @@ public class NotesService {
         }
         return maxId + 1;
     }
-
-
-
-    /*
-    public void addNoteDB(Note note){
-        dao.saveNotes(note);
-    }
-    */
-
-    /*
-    public List<Note> extractDatabaseNotesTable(){
-        return dao.findAll();
-    }
-    */
-
-    /*
-    Note createNoteAllParams(int id, String body, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int task_fk){
-        return new Note(id, body, creationDate, lastUpdateDate, task_fk);
-    }
-    */
-
 }
