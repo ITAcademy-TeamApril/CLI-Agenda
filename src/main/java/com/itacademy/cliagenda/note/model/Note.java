@@ -10,9 +10,10 @@ public class Note {
     private int task_fk;
 
     //Usar este constructor para crear nuevas Notas.
-    public Note(int id, String body) {
+    public Note(int id, String body, int task_fk) {
         this.id = id;
         changeBody(body);
+        this.task_fk=task_fk;
     }
 
     //Usar este constructor para cuando haya que recrear los objetos Notas desde la base de datos.

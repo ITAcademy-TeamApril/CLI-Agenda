@@ -14,6 +14,12 @@ public class Task {
         this.body = body;
     }
 
+    public Task(int id, String body, int event_fk) {
+        Id = id;
+        this.body = body;
+        this.event_fk=event_fk;
+    }
+
     //Usar este constructor para cuando haya que recrear los objetos Task desde la base de datos.
     //o bien para cuando se creen con fk
     public Task(int id, String body, Event event) {
