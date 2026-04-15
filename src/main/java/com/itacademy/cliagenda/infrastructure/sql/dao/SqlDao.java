@@ -1,5 +1,6 @@
 package com.itacademy.cliagenda.infrastructure.sql.dao;
 
+import com.itacademy.cliagenda.event.model.Event;
 import com.itacademy.cliagenda.note.model.Note;
 import com.itacademy.cliagenda.task.model.Task;
 
@@ -30,6 +31,7 @@ public class SqlDao {
             if (input == null) {
                 throw new RuntimeException("No se pudo encontrar application.properties");
             }
+            assert props != null;
             props.load(input);
         } catch (IOException e) {
             throw new RuntimeException("Error al cargar properties", e);
@@ -44,9 +46,9 @@ public class SqlDao {
         );
     }
 
-    public List<Note> findAll() {
+    public List<Note> findAllNotes() {
         List<Note> notes = new ArrayList<>();
-        String query = "SELECT id, body, creation_date, last_update_date, task_fk FROM notes";
+        String query = "SELECT id, body, task_fk FROM notes";
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
@@ -55,13 +57,9 @@ public class SqlDao {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String body = rs.getString("body");
-                LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
-                LocalDateTime lastUpdateDate = rs.getTimestamp("last_update_date") != null
-                    ? rs.getTimestamp("last_update_date").toLocalDateTime()
-                    : null;
                 int task_fk = rs.getInt("task_fk");
 
-                notes.add(new Note(id, body, creationDate, lastUpdateDate, task_fk));
+                notes.add(new Note(id, body, task_fk));
             }
         } catch (SQLException e) {
             System.err.println("Error al extraer notas de la base de datos: " + e.getMessage());
@@ -69,16 +67,14 @@ public class SqlDao {
         return notes;
     }
 
-    public void save(Note note) {
-        String query = "INSERT INTO notes (id, body, creation_date, last_update_date, task_fk) VALUES (?, ?, ?, ?, ?)";
+    public void saveNotes(Note note) {
+        String query = "INSERT INTO notes (id, body, task_fk) VALUES (?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setInt(1, note.getId());
             pstmt.setString(2, note.getBody());
-            pstmt.setTimestamp(3, Timestamp.valueOf(note.getCreationDate().replace("T", " ")));
-            pstmt.setTimestamp(4, note.getLastUpdateDate() != null ? Timestamp.valueOf(note.getLastUpdateDate()) : null);
             pstmt.setInt(5, note.getTask_fk());
 
             pstmt.executeUpdate();
@@ -89,7 +85,7 @@ public class SqlDao {
 
     public List<Task> findAllTasks() {
         List<Task> tasks = new ArrayList<>();
-        String query = "SELECT id, name, task_date, creation_date, last_update_date, event_fk FROM tasks";
+        String query = "SELECT id, body, event_fk FROM tasks";
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
@@ -97,19 +93,10 @@ public class SqlDao {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String name = rs.getString("name");
-                LocalDateTime taskDate = rs.getTimestamp("task_date") != null
-                    ? rs.getTimestamp("task_date").toLocalDateTime()
-                    : null;
-                LocalDateTime creationDate = rs.getTimestamp("creation_date") != null
-                    ? rs.getTimestamp("creation_date").toLocalDateTime()
-                    : null;
-                LocalDateTime lastUpdateDate = rs.getTimestamp("last_update_date") != null
-                    ? rs.getTimestamp("last_update_date").toLocalDateTime()
-                    : null;
+                String body = rs.getString("body");
                 int event_fk = rs.getInt("event_fk");
 
-                tasks.add(new Task(id, name, taskDate, creationDate, lastUpdateDate, event_fk));
+                tasks.add(new Task(id, body, event_fk));
             }
         } catch (SQLException e) {
             System.err.println("Error al extraer tareas de la base de datos: " + e.getMessage());
@@ -118,20 +105,59 @@ public class SqlDao {
     }
 
     public void saveTask(Task task) {
-        String query = "INSERT INTO tasks (id, name, task_date, creation_date, last_update_date, event_fk) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO tasks (id, body, event_fk) VALUES (?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setInt(1, task.getId());
-            pstmt.setString(2, task.getName());
-            pstmt.setTimestamp(3, task.getCreationDate() != null ? Timestamp.valueOf(task.getCreationDate()) : null);
-            pstmt.setTimestamp(4, task.getLastUpdateDate() != null ? Timestamp.valueOf(task.getLastUpdateDate()) : null);
+            pstmt.setString(2, task.getBody());
             pstmt.setInt(5, task.getEvent_fk());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error al insertar tarea en la base de datos: " + e.getMessage());
+        }
+    }
+
+    public List<Event> findAllEvents() {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT id, title, description, eventDate, recurring FROM events";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                LocalDateTime eventDate = rs.getTimestamp("eventDate").toLocalDateTime();
+                boolean recurrent = rs.getBoolean("recurrent");
+
+                events.add(new Event(id, title, description, eventDate, recurrent));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al extraer notas de la base de datos: " + e.getMessage());
+        }
+        return events;
+    }
+
+    public void saveEvents(Event event) {
+        String query = "INSERT INTO notes (id, title, description, eventDate, recurring) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, event.getId());
+            pstmt.setString(2, event.getTitle());
+            pstmt.setString(3, event.getDescription());
+            pstmt.setTimestamp(4, Timestamp.valueOf(event.getDateTimeEvent()));
+            pstmt.setBoolean(6, event.isRecurring());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al insertar nota en la base de datos: " + e.getMessage());
         }
     }
 }

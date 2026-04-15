@@ -1,40 +1,25 @@
 package com.itacademy.cliagenda.event.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Event {
 
-    private final int idEvent;
-    private String description;
+    private final int Id;
     private String title;
+    private String description;
     private LocalDateTime dateTimeEvent;
     private boolean recurring;
-    private List<Integer> taskIds;
 
-    // constructor completo
-    public Event(int idEvent, String description, String title, LocalDateTime dateTimeEvent, boolean recurring, List<Integer> taskIds) {
-        this.idEvent = idEvent;
-        this.description = description;
+    public Event(int Id, String title, String description, LocalDateTime dateTimeEvent, boolean recurring) {
+        this.Id = Id;
         this.title = title;
+        this.description = description;
         this.dateTimeEvent = dateTimeEvent;
         this.recurring = recurring;
-        this.taskIds = taskIds;
     }
 
-    //constructor sin taskIds list
-    public Event(int idEvent, String description, String title, LocalDateTime dateTimeEvent, boolean recurring) {
-        this.idEvent = idEvent;
-        this.description = description;
-        this.title = title;
-        this.dateTimeEvent = dateTimeEvent;
-        this.recurring = recurring;
-        this.taskIds = new ArrayList<>();
-    }
-
-    public int getIdEvent() {
-        return idEvent;
+    public int getId() {
+        return Id;
     }
 
     public String getDescription() {
@@ -53,16 +38,8 @@ public class Event {
         return recurring;
     }
 
-    public List<Integer> getTaskIds() {
-        return taskIds;
-    }
-
     public void setRecurring(boolean recurring) {
         this.recurring = recurring;
-    }
-
-    public void setTaskIds(List<Integer> taskIds) {
-        this.taskIds = taskIds;
     }
 
     public void changeTitle(String title) {
@@ -82,5 +59,9 @@ public class Event {
         } catch(Exception e){
             System.err.println(e.getMessage());
         }
+    }
+
+    public void changeDateEvent(LocalDateTime datetime){
+        this.dateTimeEvent=datetime;
     }
 }

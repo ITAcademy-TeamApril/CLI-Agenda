@@ -53,7 +53,7 @@ public class NotesService {
 
     /*
     public void addNoteDB(Note note){
-        dao.save(note);
+        dao.saveNotes(note);
     }
     */
 

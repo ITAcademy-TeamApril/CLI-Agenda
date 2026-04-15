@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 
 public class Note {
     private final int id;
-    private LocalDateTime creationDate = LocalDateTime.now();
-    private LocalDateTime lastUpdateDate;
     private String body;
     private int task_fk;
 
@@ -18,12 +16,13 @@ public class Note {
     }
 
     //Usar este constructor para cuando haya que recrear los objetos Notas desde la base de datos.
-    public Note(int id, String body, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int task_fk) {
+    //o bien para cuando se creen con fk
+    public Note(int id, String body, int task_fk) {
         this.id = id;
-        this.creationDate=creationDate;
-        this.lastUpdateDate=lastUpdateDate;
         this.body=body;
-        this.task_fk = task_fk;
+        if (task_fk!=0){
+            this.task_fk = task_fk;
+        }
     }
 
     public int getId() {
@@ -40,18 +39,9 @@ public class Note {
                 throw new IllegalArgumentException("La petición de escribir una nota no se ha realizado por ser excesivamente largo.");
             }
             this.body = body;
-            this.lastUpdateDate = LocalDateTime.now();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-    }
-
-    public String getCreationDate() {
-        return creationDate.toString();
-    }
-
-    public LocalDateTime getLastUpdateDate() {
-        return lastUpdateDate;
     }
 
     public int getTask_fk() {

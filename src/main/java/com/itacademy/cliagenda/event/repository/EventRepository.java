@@ -22,7 +22,7 @@ public class EventRepository {
     //FIND EVENT BY ID
     public Event findEventById(int id) {
         for (Event element : eventList) {
-            if (element.getIdEvent() == id) {
+            if (element.getId() == id) {
                 return element;
             }
         }
@@ -34,7 +34,7 @@ public class EventRepository {
     public void removeEventById(int id) {
         Event eventToRemove = null;
         for (Event element : eventList) {
-            if (element.getIdEvent() == id) {
+            if (element.getId() == id) {
                 eventToRemove = element;
                 break;
             }

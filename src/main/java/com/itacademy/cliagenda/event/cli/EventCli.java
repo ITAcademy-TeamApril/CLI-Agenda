@@ -70,7 +70,7 @@ public class EventCli {
             return;
         }
         for (Event event : events) {
-            System.out.println("ID: " + event.getIdEvent()
+            System.out.println("ID: " + event.getId()
                     + " | " + event.getTitle()
                     + " | " + event.getDateTimeEvent()
                     + " | Recurring: " + event.isRecurring());
@@ -85,7 +85,7 @@ public class EventCli {
         if (event == null) {
             System.out.println("Event not found.");
         } else {
-            System.out.println("ID: " + event.getIdEvent());
+            System.out.println("ID: " + event.getId());
             System.out.println("Title: " + event.getTitle());
             System.out.println("Description: " + event.getDescription());
             System.out.println("Date: " + event.getDateTimeEvent());

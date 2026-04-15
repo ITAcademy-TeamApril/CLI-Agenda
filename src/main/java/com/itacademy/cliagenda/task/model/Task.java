@@ -1,48 +1,41 @@
 package com.itacademy.cliagenda.task.model;
 
+import com.itacademy.cliagenda.event.model.Event;
+
 import java.time.LocalDateTime;
 
 public class Task {
     private int Id;
-    private String name;
-    private LocalDateTime creationDate = LocalDateTime.now();
-    private LocalDateTime lastUpdateDate;
+    private String body;
     private int event_fk;
 
-    public Task(int id, String name, LocalDateTime eventDate) {
+    public Task(int id, String body, LocalDateTime eventDate) {
         Id = id;
-        this.name = name;
+        this.body = body;
     }
 
-    public Task(int id, String name, LocalDateTime eventDate, LocalDateTime creationDate, LocalDateTime lastUpdateDate, int event_fk) {
+    //Usar este constructor para cuando haya que recrear los objetos Task desde la base de datos.
+    //o bien para cuando se creen con fk
+    public Task(int id, String body, int event_fk) {
         Id = id;
-        this.name = name;
-        this.creationDate=creationDate;
-        this.lastUpdateDate=lastUpdateDate;
+        this.body = body;
+        if (event_fk!=0){
+            this.event_fk = event_fk;
+        }
     }
 
     public int getId() {
         return Id;
     }
 
-    public String getName() {
-        return name;
+    public String getBody() {
+        return body;
     }
 
     public int getEvent_fk() {
         return event_fk;
     }
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public LocalDateTime getLastUpdateDate() {
-        return lastUpdateDate;
-    }
-
-    //Descomentar cuando se una a la clase Event
-    /*
     public void setEvent_fk(Event event) {
         try{
             if (event.getId() < 0) {
@@ -53,5 +46,4 @@ public class Task {
             System.err.println(e.getMessage());
         }
     }
-     */
 }

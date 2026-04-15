@@ -30,8 +30,8 @@ public class EventService {
         List<Event> events = repo.getAllEvents();
         int maxId = 0;
         for (Event event : events) {
-            if (event.getIdEvent() > maxId) {
-                maxId = event.getIdEvent();
+            if (event.getId() > maxId) {
+                maxId = event.getId();
             }
         }
         return maxId + 1;
