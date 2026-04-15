@@ -17,6 +17,8 @@ public class SqlDao {
     private static final SqlDao INSTANCE = new SqlDao();
     private Properties props;
 
+    //////////////////////////////// SQL Connection Methods
+
     private SqlDao() {
         loadProperties();
     }
@@ -45,6 +47,8 @@ public class SqlDao {
             props.getProperty("jdbc.password")
         );
     }
+
+    ////////////////////////////////
 
     public List<Note> findAllNotes() {
         List<Note> notes = new ArrayList<>();

@@ -32,6 +32,17 @@ public class Task {
         return body;
     }
 
+    public void changeBody(String body){
+        try {
+            if (body != null && body.length() > 250) {
+                throw new IllegalArgumentException("La petición de escribir una nota no se ha realizado por ser excesivamente largo.");
+            }
+            this.body = body;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
     public int getEvent_fk() {
         return event_fk;
     }
