@@ -3,12 +3,8 @@ package com.itacademy.cliagenda.application.menu;
 import com.itacademy.cliagenda.event.cli.EventCli;
 import com.itacademy.cliagenda.event.repository.EventRepository;
 import com.itacademy.cliagenda.event.service.EventService;
-import com.itacademy.cliagenda.note.repository.NotesRepository;
-import com.itacademy.cliagenda.note.service.NotesService;
 import com.itacademy.cliagenda.task.cli.TaskCli;
 import com.itacademy.cliagenda.note.cli.NoteCli;
-import com.itacademy.cliagenda.task.repository.TaskRepository;
-import com.itacademy.cliagenda.task.service.TaskService;
 
 import java.util.Scanner;
 
@@ -21,13 +17,8 @@ public class AppMenu {
     EventService eventService = new EventService(eventRepo);
     EventCli eventCli = new EventCli(eventService);
 
-    TaskRepository taskRepository = new TaskRepository();
-    TaskService taskService = new TaskService(taskRepository);
-    TaskCli taskCli = new TaskCli(taskService);
-
-    NotesRepository notesRepository = new NotesRepository();
-    NotesService notesService = new NotesService(notesRepository);
-    NoteCli noteCli = new NoteCli(notesService);
+    TaskCli taskCli = new TaskCli();
+    NoteCli noteCli = new NoteCli();
 
     public void playMenu() {
         do {
