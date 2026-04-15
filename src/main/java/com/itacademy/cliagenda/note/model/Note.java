@@ -17,9 +17,12 @@ public class Note {
 
     //Usar este constructor para cuando haya que recrear los objetos Notas desde la base de datos.
     //o bien para cuando se creen con fk
-    public Note(int id, String body, int task_fk) {
+
+    //crear método extraiga id de task y cree la nota con ese ide fk
+    public Note(int id, String body, Task task) {
         this.id = id;
         this.body=body;
+        int task_fk=task.getId();
         if (task_fk!=0){
             this.task_fk = task_fk;
         }
