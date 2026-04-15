@@ -27,7 +27,7 @@ public class AppMenu {
 
     NotesRepository notesRepo = new NotesRepository();
     NotesService notesService = new NotesService(notesRepo);
-    NoteCli noteCli = new NoteCli(notesService);
+    NoteCli noteCli = new NoteCli(notesService, taskService);
 
     public void playMenu() {
         do {

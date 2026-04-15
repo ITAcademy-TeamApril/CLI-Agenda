@@ -2,6 +2,9 @@ package com.itacademy.cliagenda.note.cli;
 
 import com.itacademy.cliagenda.note.model.Note;
 import com.itacademy.cliagenda.note.service.NotesService;
+import com.itacademy.cliagenda.task.model.Task;
+import com.itacademy.cliagenda.task.repository.TaskRepository;
+import com.itacademy.cliagenda.task.service.TaskService;
 
 import java.util.List;
 import java.util.Scanner;
@@ -9,11 +12,16 @@ import java.util.Scanner;
 public class NoteCli {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final NotesService service;
+    private final NotesService serviceNotes;
+    private final TaskService serviceTask;
 
 
-    public NoteCli(NotesService service) {
-        this.service = service;
+
+
+    public NoteCli(NotesService serviceNotes, TaskService taskService) {
+        this.serviceNotes = serviceNotes;
+        this.serviceTask = taskService;
+
     }
 
     public void showMenu() {
@@ -51,12 +59,13 @@ public class NoteCli {
         String body = scanner.nextLine();
         System.out.println("Introduce \"task ID\" to link this note to:");
         int idTaskForThisNote = scanner.nextInt();
-        Note note = service.createNote(body, idTaskForThisNote);
+        Task taskTemp = serviceTask.findTaskById(idTaskForThisNote);
+        Note note = serviceNotes.createNote(body, taskTemp);
         System.out.println("Note created with ID: " + note.getId() + " linked to task with ID #" + idTaskForThisNote );
     }
 
     public void listNotes() {
-        List<Note> notes = service.getAllNotes();
+        List<Note> notes = serviceNotes.getAllNotes();
         if (notes.isEmpty()) {
             System.out.println("No notes found..");
             return;
@@ -70,7 +79,7 @@ public class NoteCli {
         System.out.println("Introduce note ID to search it:");
         int id = scanner.nextInt();
         scanner.nextLine(); // limpieza del fuck buffer!
-        Note note = service.findNoteById(id);
+        Note note = serviceNotes.findNoteById(id);
         if (note == null) {
             System.out.println("Note not found..");
         } else {
@@ -85,7 +94,7 @@ public class NoteCli {
         System.out.println("Introduce note ID to delete it");
         int id = scanner.nextInt();
         scanner.nextLine(); // limpieza del mamahuevo buffer!
-        service.deleteNoteById(id);
+        serviceNotes.deleteNoteById(id);
         System.out.println("Note with id " + id + " is correctly deleted");
     }
 }
