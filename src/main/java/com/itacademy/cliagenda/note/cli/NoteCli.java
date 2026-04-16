@@ -28,7 +28,8 @@ public class NoteCli {
             System.out.println("1 - Create note");
             System.out.println("2 - List notes");
             System.out.println("3 - Find note");
-            System.out.println("4 - Delete note");
+            System.out.println("4 - Update note");
+            System.out.println("5 - Delete note");
             System.out.println("0 - Return to App Menu");
 
             option = scanner.nextInt();
@@ -45,6 +46,9 @@ public class NoteCli {
                     findNote();
                     break;
                 case (4):
+                    updateNote();
+                    break;
+                case (5):
                     deleteNote();
                     break;
             }
@@ -52,11 +56,30 @@ public class NoteCli {
     }
 
     public void createNote() {
-        System.out.println("Introduce note body:");
-        String body = scanner.nextLine();
+        List<Task> tasks = serviceTask.getAllTasks();
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available. You need to create a task first before adding a note.");
+            return;
+        }
+
+        System.out.println("Available tasks:");
+        for (Task task : tasks) {
+            System.out.println("  ID: " + task.getId() + " - " + task.getBody());
+        }
+
         System.out.println("Introduce \"task ID\" to link this note to:");
         int idTaskForThisNote = scanner.nextInt();
+        scanner.nextLine();
+
         Task taskTemp = serviceTask.findTaskById(idTaskForThisNote);
+        if (taskTemp == null) {
+            System.out.println("Task not found. Note not created.");
+            return;
+        }
+
+        System.out.println("Introduce note body:");
+        String body = scanner.nextLine();
+
         Note note = serviceNotes.createNote(body, taskTemp);
         System.out.println("Note created with ID: " + note.getId() + " linked to task with ID #" + idTaskForThisNote);
     }
@@ -93,5 +116,55 @@ public class NoteCli {
         scanner.nextLine(); // limpieza del mamahuevo buffer!
         serviceNotes.deleteNoteById(id);
         System.out.println("Note with id " + id + " is correctly deleted");
+    }
+
+    public void updateNote() {
+        System.out.println("Introduce note ID to update:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        
+        Note note = serviceNotes.findNoteById(id);
+        if (note == null) {
+            System.out.println("Note not found.");
+            return;
+        }
+
+        System.out.println("Current note:");
+        System.out.println("  ID: " + note.getId());
+        System.out.println("  Body: " + note.getBody());
+        System.out.println("  Task FK: " + note.getTask_fk());
+        System.out.println();
+
+        System.out.println("Do you want to modify the body? (Y/N):");
+        String modifyBody = scanner.nextLine();
+        if (modifyBody.equalsIgnoreCase("y")) {
+            System.out.println("Introduce new body:");
+            String newBody = scanner.nextLine();
+            note.changeBody(newBody);
+        }
+
+        List<Task> tasks = serviceTask.getAllTasks();
+        if (!tasks.isEmpty()) {
+            System.out.println("Do you want to modify the task association? (Y/N):");
+            String modifyTask = scanner.nextLine();
+            if (modifyTask.equalsIgnoreCase("y")) {
+                System.out.println("Available tasks:");
+                for (Task task : tasks) {
+                    System.out.println("  ID: " + task.getId() + " - " + task.getBody());
+                }
+                System.out.println("Introduce new task ID:");
+                int newTaskId = scanner.nextInt();
+                scanner.nextLine();
+                Task newTask = serviceTask.findTaskById(newTaskId);
+                if (newTask != null) {
+                    note.setTask_fk(newTaskId);
+                } else {
+                    System.out.println("Task not found. Keeping original task association.");
+                }
+            }
+        }
+
+        serviceNotes.updateNote(note);
+        System.out.println("Note updated successfully.");
     }
 }

@@ -51,6 +51,10 @@ public class NotesService {
         repo.addIndividualNote(note);
     }
 
+    public List<Note> getNotesByTaskId(int taskId) {
+        return repo.getNotesByTaskFK(taskId);
+    }
+
 
     private int generateNextId() {
         List<Note> notes = repo.getNotes();

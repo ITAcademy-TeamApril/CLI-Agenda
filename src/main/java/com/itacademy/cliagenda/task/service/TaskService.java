@@ -51,6 +51,24 @@ public class TaskService {
         repo.addIndividualTask(task);
     }
 
+    public List<Task> getTasksByCompleted(boolean completed) {
+        return repo.getTasksByCompleted(completed);
+    }
+
+    public void markTaskCompleted(int id, boolean completed) {
+        Task task = repo.getTaskById(id);
+        if (task != null) {
+            task.setCompleted(completed);
+            dao.updateTask(task);
+            repo.removeTaskById(id);
+            repo.addIndividualTask(task);
+        }
+    }
+
+    public List<Task> getTasksByEventId(int eventId) {
+        return repo.getTaskByEventFK(eventId);
+    }
+
     int generateNextId() {
         List<Task> tasks = repo.getTasks();
         int maxId = 0;
