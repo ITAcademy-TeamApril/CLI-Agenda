@@ -6,13 +6,22 @@ CLI-Agenda es una aplicacion de consola escrita en Java que permite gestionar ta
 
 ## Funcionalidades
 
-- Crear, editar, listar y eliminar tareas
-- Filtrar tareas por prioridad, estado y fecha
-- Crear, editar, listar y eliminar notas asociadas a tareas
-- Registrar eventos importantes (cumpleanos, recordatorios, citas...)
-- Notificaciones para eventos proximos
-- Repeticion de eventos anual o personalizada
-- Todo gestionado desde la terminal con comandos claros
+### Tareas (Tasks)
+- Crear, listar, buscar, actualizar y eliminar tareas
+- Filtrar tareas por estado: todas, incompletas, completadas
+- Cada tarea puede marcarse como completada/incompleta
+- Las tareas pueden asociarse a un evento
+
+### Notas (Notes)
+- Crear, listar, buscar, actualizar y eliminar notas
+- Las notas deben asociarse a una tarea existente
+- Al crear una nota, se muestra la lista de tareas disponibles
+
+### Eventos (Events)
+- Crear, listar, buscar, actualizar y eliminar eventos
+- Validacion de formato de fecha con reintento en caso de error
+- Los eventos pueden tener repeticion (recurring)
+- Al buscar un evento, se muestran las tareas asociadas
 
 ---
 
@@ -56,6 +65,42 @@ docker-compose down
 
 ---
 
+## Menu de la aplicacion
+
+### Menu principal
+- 1 - TASKS
+- 2 - NOTES
+- 3 - EVENTS
+- 0 - Salir
+
+### Submenu Tasks
+- 1 - Create task
+- 2 - List all tasks
+- 3 - List incomplete tasks
+- 4 - List completed tasks
+- 5 - Find task
+- 6 - Update task
+- 7 - Delete task
+- 0 - Volver
+
+### Submenu Notes
+- 1 - Create note
+- 2 - List notes
+- 3 - Find note
+- 4 - Update note
+- 5 - Delete note
+- 0 - Volver
+
+### Submenu Events
+- 1 - Create event
+- 2 - List events
+- 3 - Find event
+- 4 - Update event
+- 5 - Delete event
+- 0 - Volver
+
+---
+
 ## Tecnologias utilizadas
 
 - Java — lenguaje principal
@@ -63,6 +108,7 @@ docker-compose down
 - Docker — despliegue de la base de datos
 - Maven — gestion de dependencias
 - JUnit 5 — pruebas unitarias
+- MySQL 8.0 — base de datos
 
 ---
 
@@ -81,9 +127,9 @@ docker-compose down
 src/
 ├── main/java/com/itacademy/cliagenda/
 │   ├── application/       # Punto de entrada y menu
-│   ├── event/             # Gestion de eventos
-│   ├── task/              # Gestion de tareas
-│   ├── note/              # Gestion de notas
+│   ├── event/             # Gestion de eventos (model, service, repository, cli)
+│   ├── task/              # Gestion de tareas (model, service, repository, cli)
+│   ├── note/              # Gestion de notas (model, service, repository, cli)
 │   ├── infrastructure/    # Acceso a datos (SQL DAO)
 │   └── common/            # Utilidades compartidas
 └── test/                  # Pruebas unitarias
@@ -102,8 +148,8 @@ Cada funcionalidad se desarrolla en una rama propia y se integra en `dev` median
 
 COPYRIGHT and LICENSE
 
-Copyleft 2025 Ulises Lafuente, Daniel vila
+Copyleft 2025 Ulises Lafuente, Daniel Vila
 
-BNotas es software libre; puedes redistribuirlo y/o modificarlo bajo los términos de la Licencia Apache 2.0.
+CLI-Agenda es software libre; puedes redistribuirlo y/o modificarlo bajo los terminos de la Licencia Apache 2.0.
 
-BNotas se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA; sin siquiera la garantía implícita de COMERCIABILIDAD o APTITUD PARA UN PROPÓSITO PARTICULAR. Consulta la Licencia Licencia Apache 2.0. para más detalles.
+CLI-Agenda se distribuye con la esperanza de que sea util, pero SIN NINGUNA GARANTIA; sin siquiera la garantia implicita de COMERCIABILIDAD o APTITUD PARA UN PROPOSITO PARTICULAR. Consulta la Licencia Apache 2.0 para mas detalles.
