@@ -6,16 +6,26 @@ public class Task {
     private final int Id;
     private String body;
     private int event_fk;
+    private boolean completed;
 
     public Task(int id, String body) {
         Id = id;
         this.body = body;
+        this.completed = false;
     }
 
     public Task(int id, String body, int event_fk) {
         Id = id;
         this.body = body;
         this.event_fk = event_fk;
+        this.completed = false;
+    }
+
+    public Task(int id, String body, int event_fk, boolean completed) {
+        Id = id;
+        this.body = body;
+        this.event_fk = event_fk;
+        this.completed = completed;
     }
 
     //Usar este constructor para cuando haya que recrear los objetos Task desde la base de datos.
@@ -27,6 +37,7 @@ public class Task {
         if (event_fk != 0) {
             this.event_fk = event_fk;
         }
+        this.completed = false;
     }
 
     public int getId() {
@@ -61,5 +72,21 @@ public class Task {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    public void setEvent_fk(int event_fk) {
+        if (event_fk < 0) {
+            System.err.println("El valor proporcionado para event_fk no es válido.");
+            return;
+        }
+        this.event_fk = event_fk;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

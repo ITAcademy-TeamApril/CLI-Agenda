@@ -89,7 +89,7 @@ public class SqlDao {
 
     public List<Task> findAllTasks() {
         List<Task> tasks = new ArrayList<>();
-        String query = "SELECT id, body, event_fk FROM tasks";
+        String query = "SELECT id, body, event_fk, completed FROM tasks";
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
@@ -99,8 +99,9 @@ public class SqlDao {
                 int id = rs.getInt("id");
                 String body = rs.getString("body");
                 int event_fk = rs.getInt("event_fk");
+                boolean completed = rs.getBoolean("completed");
 
-                tasks.add(new Task(id, body, event_fk));
+                tasks.add(new Task(id, body, event_fk, completed));
             }
         } catch (SQLException e) {
             System.err.println("Error al extraer tareas de la base de datos: " + e.getMessage());
@@ -109,7 +110,7 @@ public class SqlDao {
     }
 
     public void saveTask(Task task) {
-        String query = "INSERT INTO tasks (id, body, event_fk) VALUES (?, ?, ?)";
+        String query = "INSERT INTO tasks (id, body, event_fk, completed) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -117,6 +118,7 @@ public class SqlDao {
             pstmt.setInt(1, task.getId());
             pstmt.setString(2, task.getBody());
             pstmt.setInt(3, task.getEvent_fk());
+            pstmt.setBoolean(4, task.isCompleted());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -208,14 +210,15 @@ public class SqlDao {
     }
 
     public void updateTask(Task task) {
-        String query = "UPDATE tasks SET body = ?, event_fk = ? WHERE id = ?";
+        String query = "UPDATE tasks SET body = ?, event_fk = ?, completed = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, task.getBody());
             pstmt.setInt(2, task.getEvent_fk());
-            pstmt.setInt(3, task.getId());
+            pstmt.setBoolean(3, task.isCompleted());
+            pstmt.setInt(4, task.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

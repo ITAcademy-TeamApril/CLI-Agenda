@@ -12,7 +12,7 @@ package "com.itacademy.cliagenda.application" {
         + main(args: String[])
     }
     class AppMenu {
-        + showMainMenu()
+        + playMenu()
     }
 }
 
@@ -27,6 +27,7 @@ package "com.itacademy.cliagenda.note" #e3f2fd {
         + changeBody(body: String)
         + getTask_fk(): int
         + setTask_fk(task: Task)
+        + setTask_fk(task_fk: int)
     }
     class NotesRepository {
         - notes: List<Note>
@@ -47,12 +48,16 @@ package "com.itacademy.cliagenda.note" #e3f2fd {
         + deleteNoteById(id: int)
         + updateNote(note: Note)
         + findNoteById(id: int): Note
+        + getNotesByTaskId(taskId: int): List<Note>
     }
     class NoteCli {
+        - serviceNotes: NotesService
+        - serviceTask: TaskService
         + showMenu()
         + createNote()
         + listNotes()
         + findNote()
+        + updateNote()
         + deleteNote()
     }
 }
@@ -62,12 +67,18 @@ package "com.itacademy.cliagenda.task" #e8f5e8 {
         - id: int
         - body: String
         - event_fk: int
+        - completed: boolean
+        + Task(id, body)
         + Task(id, body, eventFk)
+        + Task(id, body, eventFk, completed)
         + getId(): int
         + getBody(): String
         + changeBody(body: String)
         + getEvent_fk(): int
         + setEvent_fk(event: Event)
+        + setEvent_fk(event_fk: int)
+        + isCompleted(): boolean
+        + setCompleted(completed: boolean)
     }
     class TaskRepository {
         - tasks: List<Task>
@@ -77,6 +88,7 @@ package "com.itacademy.cliagenda.task" #e8f5e8 {
         + removeTaskById(id: int)
         + getTaskById(id: int): Task
         + getTaskByEventFK(eventFk: int): List<Task>
+        + getTasksByCompleted(completed: boolean): List<Task>
     }
     class TaskService {
         - repo: TaskRepository
@@ -88,12 +100,21 @@ package "com.itacademy.cliagenda.task" #e8f5e8 {
         + deleteTaskById(id: int)
         + updateTask(task: Task)
         + findTaskById(id: int): Task
+        + getTasksByCompleted(completed: boolean): List<Task>
+        + markTaskCompleted(id: int, completed: boolean)
+        + getTasksByEventId(eventId: int): List<Task>
     }
     class TaskCli {
+        - service: TaskService
+        - notesService: NotesService
+        - eventService: EventService
         + showMenu()
         + createTask()
         + listTasks()
+        + listIncompleteTasks()
+        + listCompletedTasks()
         + findTask()
+        + updateTask()
         + deleteTask()
     }
 }
@@ -134,17 +155,19 @@ package "com.itacademy.cliagenda.event" #fff3e0 {
         + findEventById(id: int): Event
     }
     class EventCli {
+        - service: EventService
+        - taskService: TaskService
         + showMenu()
         + createEvent()
         + listEvents()
         + findEvent()
+        + updateEvent()
         + deleteEvent()
     }
 }
 
 package "com.itacademy.cliagenda.infrastructure.sql" #fce4ec {
     class SqlDao {
-        - connection: Connection
         - instance: SqlDao
         + getInstance(): SqlDao <<singleton>>
         + findAllNotes(): List<Note>
@@ -192,6 +215,7 @@ NotesService --> SqlDao : uses
 NotesService --> Note : creates/manages
 NotesRepository --> Note : stores
 NoteCli --> NotesService : uses
+NoteCli --> TaskService : uses
 
 ' Task relationships
 TaskService --> TaskRepository : uses
@@ -199,6 +223,8 @@ TaskService --> SqlDao : uses
 TaskService --> Task : creates/manages
 TaskRepository --> Task : stores
 TaskCli --> TaskService : uses
+TaskCli --> NotesService : uses
+TaskCli --> EventService : uses
 
 ' Event relationships
 EventService --> EventRepository : uses
@@ -206,6 +232,7 @@ EventService --> SqlDao : uses
 EventService --> Event : creates/manages
 EventRepository --> Event : stores
 EventCli --> EventService : uses
+EventCli --> TaskService : uses
 
 ' Cross-package relationships
 Note --> Task : references (task_fk)

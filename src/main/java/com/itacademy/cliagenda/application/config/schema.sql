@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     id INT PRIMARY KEY,
     body VARCHAR(100),
     event_fk INT,
+    completed TINYINT DEFAULT 0,
     FOREIGN KEY (event_fk) REFERENCES events(id)
 );
 
@@ -30,8 +31,8 @@ INSERT INTO events (id, title, description, eventDate, recurrent) VALUES
 (2, 'Presentación proyecto','descripcion' , '2024-06-20 14:00:00', 0),
 (3, 'Entrega deadline', 'descripcion' ,'2024-06-30 23:59:00', 0);
 
-INSERT INTO tasks (id, body, event_fk) VALUES (1, 'Tarea 1', 1);
-INSERT INTO tasks (id, body, event_fk) VALUES (2, 'Tarea 2', 1);
+INSERT INTO tasks (id, body, event_fk, completed) VALUES (1, 'Tarea 1', 1, 0);
+INSERT INTO tasks (id, body, event_fk, completed) VALUES (2, 'Tarea 2', 1, 0);
 
 INSERT INTO notes (id, body, task_fk) VALUES (1, 'Preparar slides para la reunión', 1);
 INSERT INTO notes (id, body, task_fk) VALUES (2, 'Revisar presupuesto', 1);

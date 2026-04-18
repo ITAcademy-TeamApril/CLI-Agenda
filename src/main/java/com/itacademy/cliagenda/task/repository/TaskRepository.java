@@ -66,4 +66,14 @@ public class TaskRepository {
         }
         return result;
     }
+
+    public List<Task> getTasksByCompleted(boolean completed) {
+        List<Task> result = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.isCompleted() == completed) {
+                result.add(task);
+            }
+        }
+        return result;
+    }
 }

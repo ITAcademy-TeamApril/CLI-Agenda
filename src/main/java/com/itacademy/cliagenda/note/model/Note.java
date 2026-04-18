@@ -60,4 +60,12 @@ public class Note {
             System.err.println(e.getMessage());
         }
     }
+
+    public void setTask_fk(int task_fk) {
+        if (task_fk < 0) {
+            System.err.println("El valor proporcionado para task_fk no es válido.");
+            return;
+        }
+        this.task_fk = task_fk;
+    }
 }
