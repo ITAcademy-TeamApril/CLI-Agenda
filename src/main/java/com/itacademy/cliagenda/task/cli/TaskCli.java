@@ -137,11 +137,11 @@ public class TaskCli {
             System.out.println("ID: " + task.getId());
             System.out.println("  Body: " + task.getBody());
             System.out.println("  Completed: " + (task.isCompleted() ? "Yes" : "No"));
-            System.out.println("  Asociada a evento: " + task.getEvent_fk());
+            System.out.println("  Associated to event: " + task.getEvent_fk());
 
             List<Note> notes = notesService.getNotesByTaskId(id);
             if (!notes.isEmpty()) {
-                System.out.println("  Notas asociadas:");
+                System.out.println("  Associated notes:");
                 for (Note note : notes) {
                     System.out.println("    - " + note.getBody());
                 }
