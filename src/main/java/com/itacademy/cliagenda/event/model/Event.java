@@ -9,13 +9,17 @@ public class Event {
     private String description;
     private LocalDateTime dateTimeEvent;
     private boolean recurring;
+    private boolean annualRecurring;
+    private int recurrenceInterval;
 
-    public Event(int Id, String title, String description, LocalDateTime dateTimeEvent, boolean recurring) {
+    public Event(int Id, String title, String description, LocalDateTime dateTimeEvent, boolean recurring, boolean annualRecurring, int recurrenceInterval) {
         this.Id = Id;
         this.title = title;
         this.description = description;
         this.dateTimeEvent = dateTimeEvent;
         this.recurring = recurring;
+        this.annualRecurring = annualRecurring;
+        this.recurrenceInterval = recurrenceInterval;
     }
 
     public int getId() {
@@ -34,12 +38,28 @@ public class Event {
         return dateTimeEvent;
     }
 
+    public int getRecurrenceInterval() {
+        return recurrenceInterval;
+    }
+
+    public boolean isAnnualRecurring() {
+        return annualRecurring;
+    }
+
     public boolean isRecurring() {
         return recurring;
     }
 
     public void setRecurring(boolean recurring) {
         this.recurring = recurring;
+    }
+
+    public void setAnnualRecurring(boolean annualRecurring) {
+        this.annualRecurring = annualRecurring;
+    }
+
+    public void setRecurrenceInterval(int recurrenceInterval) {
+        this.recurrenceInterval = recurrenceInterval;
     }
 
     public void changeTitle(String title) {

@@ -140,8 +140,10 @@ public class SqlDao {
                 String description = rs.getString("description");
                 LocalDateTime eventDate = rs.getTimestamp("eventDate").toLocalDateTime();
                 boolean recurrent = rs.getBoolean("recurrent");
+                boolean annualRecurring = rs.getBoolean("annualRecurring");
+                int recurrenceInterval = rs.getInt("recurrenceInterval");
 
-                events.add(new Event(id, title, description, eventDate, recurrent));
+                events.add(new Event(id, title, description, eventDate, recurrent, annualRecurring, recurrenceInterval));
             }
         } catch (SQLException e) {
             System.err.println("Error al extraer notas de la base de datos: " + e.getMessage());
@@ -150,7 +152,7 @@ public class SqlDao {
     }
 
     public void saveEvents(Event event) {
-        String query = "INSERT INTO events (id, title, description, eventDate, recurrent) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO events (id, title, description, eventDate, recurrent, annualRecurring, recurrenceInterval) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -160,6 +162,8 @@ public class SqlDao {
             pstmt.setString(3, event.getDescription());
             pstmt.setTimestamp(4, Timestamp.valueOf(event.getDateTimeEvent()));
             pstmt.setBoolean(5, event.isRecurring());
+            pstmt.setBoolean(6, event.isAnnualRecurring());
+            pstmt.setInt(7, event.getRecurrenceInterval());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -240,7 +244,7 @@ public class SqlDao {
     }
 
     public void updateEvent(Event event) {
-        String query = "UPDATE events SET title = ?, description = ?, eventDate = ?, recurrent = ? WHERE id = ?";
+        String query = "UPDATE events SET title = ?, description = ?, eventDate = ?, recurrent = ?, annualRecurring = ?, recurrenceInterval = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -249,7 +253,9 @@ public class SqlDao {
             pstmt.setString(2, event.getDescription());
             pstmt.setTimestamp(3, Timestamp.valueOf(event.getDateTimeEvent()));
             pstmt.setBoolean(4, event.isRecurring());
-            pstmt.setInt(5, event.getId());
+            pstmt.setBoolean(5, event.isAnnualRecurring());
+            pstmt.setInt(6, event.getRecurrenceInterval());
+            pstmt.setInt(7, event.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
