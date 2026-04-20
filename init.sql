@@ -16,8 +16,10 @@ CREATE TABLE IF NOT EXISTS events (
     title VARCHAR(100),
     description VARCHAR(250),
     eventDate DATETIME,
-    recurrent TINYINT
-);
+    recurrent TINYINT,
+    annualRecurring TINYINT,
+    recurrenceInterval INT
+    );
 
 CREATE TABLE IF NOT EXISTS tasks (
     id INT PRIMARY KEY,

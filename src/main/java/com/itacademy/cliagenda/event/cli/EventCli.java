@@ -71,14 +71,26 @@ public class EventCli {
                         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
                 validDate = true;
             } catch (Exception e) {
-                System.out.println("Formato de fecha incorrecto. Use el formato yyyy-MM-dd HH:mm");
+                System.out.println("Invalid date format. Use the format yyyy-MM-dd HH:mm");
             }
         }
 
         System.out.println("Recurring? (Y/N):");
         boolean recurring = scanner.nextLine().equalsIgnoreCase("y");
 
-        Event event = service.createEvent(title, description, dateTime, recurring);
+        boolean annualRecurring = false;
+        int recurrenceInterval = 0;
+
+        if (recurring) {
+            System.out.println("Annual recurring? (Y/N):");
+            annualRecurring = scanner.nextLine().equalsIgnoreCase("y");
+            if (!annualRecurring) {
+                System.out.println("Recurrence interval in months:");
+                recurrenceInterval = Integer.parseInt(scanner.nextLine());
+            }
+        }
+
+        Event event = service.createEvent(title, description, dateTime, recurring, annualRecurring, recurrenceInterval);
         System.out.println("Event \"" + event.getTitle() + "\" created.");
     }
 
@@ -89,10 +101,22 @@ public class EventCli {
             return;
         }
         for (Event event : events) {
+            List<Task> tasks = taskService.getTasksByEventId(event.getId());
+
             System.out.println("ID: " + event.getId()
                     + " | " + event.getTitle()
                     + " | " + event.getDateTimeEvent()
-                    + " | Recurring: " + event.isRecurring());
+                    + " | " + (event.isRecurring() ? (event.isAnnualRecurring() ?
+                    "Recurring: yearly" : "Recurring: each "
+                    + event.getRecurrenceInterval() + " months") : "Not recurring")
+                    + " | Tasks: " + tasks.size());
+
+            if (!tasks.isEmpty()) {
+                for (Task task : tasks) {
+                    System.out.println("    - " + task.getId() + ": " + task.getBody()
+                            + " (Completed: " + (task.isCompleted() ? "Yes" : "No") + ")");
+                }
+            }
         }
     }
 
@@ -109,12 +133,24 @@ public class EventCli {
             System.out.println("Description: " + event.getDescription());
             System.out.println("Date: " + event.getDateTimeEvent());
             System.out.println("Recurring: " + event.isRecurring());
+            if (event.isRecurring()) {
+                if (event.isAnnualRecurring()) {
+                    System.out.println("Recurrence: yearly");
+                } else {
+                    System.out.println("Recurrence: each " + event.getRecurrenceInterval() + " months");
+                }
+                System.out.println("Next recurrencies:");
+                List<LocalDateTime> dates = service.getNextRecurrencies(event);
+                for (LocalDateTime date : dates) {
+                    System.out.println("  - " + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                }
+            }
 
             List<Task> tasks = taskService.getTasksByEventId(id);
             if (!tasks.isEmpty()) {
                 System.out.println("\nAssociated tasks:");
                 for (Task task : tasks) {
-                    System.out.println("  ID: " + task.getId() + " - " + task.getBody() 
+                    System.out.println("  ID: " + task.getId() + " - " + task.getBody()
                             + " (Completed: " + (task.isCompleted() ? "Yes" : "No") + ")");
                 }
             } else {
@@ -179,7 +215,7 @@ public class EventCli {
                             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
                     validDate = true;
                 } catch (Exception e) {
-                    System.out.println("Formato de fecha incorrecto. Use el formato yyyy-MM-dd HH:mm");
+                    System.out.println("Invalid date format. Use the format yyyy-MM-dd HH:mm");
                 }
             }
             event.changeDateEvent(newDateTime);
@@ -189,8 +225,19 @@ public class EventCli {
         String modifyRecurring = scanner.nextLine();
         if (modifyRecurring.equalsIgnoreCase("y")) {
             System.out.println("Mark as recurring? (Y/N):");
-            String recurring = scanner.nextLine();
-            event.setRecurring(recurring.equalsIgnoreCase("y"));
+            boolean recurring = scanner.nextLine().equalsIgnoreCase("y");
+            event.setRecurring(recurring);
+
+            if (recurring) {
+                System.out.println("Annual recurring? (Y/N):");
+                boolean annualRecurring = scanner.nextLine().equalsIgnoreCase("y");
+                event.setAnnualRecurring(annualRecurring);
+                if (!annualRecurring) {
+                    System.out.println("Recurrence interval in months:");
+                    int recurrenceInterval = Integer.parseInt(scanner.nextLine());
+                    event.setRecurrenceInterval(recurrenceInterval);
+                }
+            }
         }
 
         service.updateEvent(event);
