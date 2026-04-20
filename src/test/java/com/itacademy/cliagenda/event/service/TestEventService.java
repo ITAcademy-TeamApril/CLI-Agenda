@@ -37,11 +37,11 @@ class TestEventService {
     @Test
     void testCreateEvent() {
         LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
-        Event event = service.createEvent("Nuevo evento", "Descripcion", dateTime, false);
-        
+        Event event = service.createEvent("Nuevo evento", "Descripcion", dateTime, false, false, 0);
+
         assertNotNull(event);
         assertEquals("Nuevo evento", event.getTitle());
-        
+
         List<Event> events = service.getAllEvents();
         assertEquals(1, events.size());
     }
@@ -49,21 +49,21 @@ class TestEventService {
     @Test
     void testDeleteEventById() {
         LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
-        Event event = service.createEvent("Evento para borrar", "Descripcion", dateTime, false);
-        
+        Event event = service.createEvent("Evento para borrar", "Descripcion", dateTime, false, false, 0);
+
         service.deleteEventById(event.getId());
-        
+
         assertNull(service.findEventById(event.getId()));
     }
 
     @Test
     void testUpdateEvent() {
         LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
-        Event event = service.createEvent("Evento original", "Descripcion", dateTime, false);
-        
+        Event event = service.createEvent("Evento original", "Descripcion", dateTime, false, false, 0);
+
         event.changeTitle("Evento actualizado");
         service.updateEvent(event);
-        
+
         Event updated = service.findEventById(event.getId());
         assertNotNull(updated);
         assertEquals("Evento actualizado", updated.getTitle());
@@ -72,10 +72,10 @@ class TestEventService {
     @Test
     void testFindEventById() {
         LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
-        Event event = service.createEvent("Evento buscado", "Descripcion", dateTime, false);
-        
+        Event event = service.createEvent("Evento buscado", "Descripcion", dateTime, false, false, 0);
+
         Event found = service.findEventById(event.getId());
-        
+
         assertNotNull(found);
         assertEquals("Evento buscado", found.getTitle());
     }

@@ -101,12 +101,22 @@ public class EventCli {
             return;
         }
         for (Event event : events) {
+            List<Task> tasks = taskService.getTasksByEventId(event.getId());
+
             System.out.println("ID: " + event.getId()
                     + " | " + event.getTitle()
                     + " | " + event.getDateTimeEvent()
                     + " | " + (event.isRecurring() ? (event.isAnnualRecurring() ?
                     "Recurring: yearly" : "Recurring: each "
-                    + event.getRecurrenceInterval() + " months") : "Not recurring"));
+                    + event.getRecurrenceInterval() + " months") : "Not recurring")
+                    + " | Tasks: " + tasks.size());
+
+            if (!tasks.isEmpty()) {
+                for (Task task : tasks) {
+                    System.out.println("    - " + task.getId() + ": " + task.getBody()
+                            + " (Completed: " + (task.isCompleted() ? "Yes" : "No") + ")");
+                }
+            }
         }
     }
 
