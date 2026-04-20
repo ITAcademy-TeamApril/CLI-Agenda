@@ -42,7 +42,7 @@ class TestSqlDao {
         Connection conn = TestContainerManager.getConnection();
         int initialCount = getNotesCount(conn);
         
-        Note note = new Note(1001, "Nota para test de inserción", 0);
+        Note note = new Note(1001, "Note for insertion test", 0);
         sqlDao.saveNotes(note);
         
         int finalCount = getNotesCount(conn);
@@ -54,14 +54,14 @@ class TestSqlDao {
     @Test
     void testSaveNotesPersistsCorrectData() throws SQLException {
         Connection conn = TestContainerManager.getConnection();
-        Note note = new Note(1002, "Nota con datos persistentes", 0);
+        Note note = new Note(1002, "Note with persistent data", 0);
         sqlDao.saveNotes(note);
         
         Note retrieved = getNoteById(conn, 1002);
         
         assertNotNull(retrieved, "Should retrieve saved note");
         assertEquals(1002, retrieved.getId());
-        assertEquals("Nota con datos persistentes", retrieved.getBody());
+        assertEquals("Note with persistent data", retrieved.getBody());
         
         deleteNoteById(conn, 1002);
     }
@@ -69,7 +69,7 @@ class TestSqlDao {
     @Test
     void testDeleteNote() throws SQLException {
         Connection conn = TestContainerManager.getConnection();
-        Note note = new Note(2001, "Nota para borrar", 0);
+        Note note = new Note(2001, "Note to delete", 0);
         sqlDao.saveNotes(note);
         
         int initialCount = getNotesCount(conn);
@@ -82,14 +82,14 @@ class TestSqlDao {
     @Test
     void testUpdateNote() throws SQLException {
         Connection conn = TestContainerManager.getConnection();
-        Note note = new Note(2002, "Nota original", 0);
+        Note note = new Note(2002, "Original note", 0);
         sqlDao.saveNotes(note);
         
-        note.changeBody("Nota actualizada");
+        note.changeBody("Updated note");
         sqlDao.updateNote(note);
         
         String updatedBody = getNoteBodyFromDb(conn, 2002);
-        assertEquals("Nota actualizada", updatedBody);
+        assertEquals("Updated note", updatedBody);
         
         deleteNoteById(conn, 2002);
     }
@@ -105,7 +105,7 @@ class TestSqlDao {
         Connection conn = TestContainerManager.getConnection();
         int initialCount = getTasksCount(conn);
         
-        Task task = new Task(3001, "Tarea para test de inserción", 0);
+        Task task = new Task(3001, "Task for insertion test", 0);
         sqlDao.saveTask(task);
         
         int finalCount = getTasksCount(conn);
@@ -117,7 +117,7 @@ class TestSqlDao {
     @Test
     void testDeleteTask() throws SQLException {
         Connection conn = TestContainerManager.getConnection();
-        Task task = new Task(3002, "Tarea para borrar", 0);
+        Task task = new Task(3002, "Task to delete", 0);
         sqlDao.saveTask(task);
         
         int initialCount = getTasksCount(conn);
@@ -130,14 +130,14 @@ class TestSqlDao {
     @Test
     void testUpdateTask() throws SQLException {
         Connection conn = TestContainerManager.getConnection();
-        Task task = new Task(3003, "Tarea original", 0);
+        Task task = new Task(3003, "Original task", 0);
         sqlDao.saveTask(task);
         
-        task.changeBody("Tarea actualizada");
+        task.changeBody("Updated task");
         sqlDao.updateTask(task);
         
         String updatedBody = getTaskBodyFromDb(conn, 3003);
-        assertEquals("Tarea actualizada", updatedBody);
+        assertEquals("Updated task", updatedBody);
         
         deleteTaskById(conn, 3003);
     }

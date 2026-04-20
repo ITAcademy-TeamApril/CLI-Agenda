@@ -31,12 +31,12 @@ public class SqlDao {
         this.props = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("com/itacademy/cliagenda/application/config/application.properties")) {
             if (input == null) {
-                throw new RuntimeException("No se pudo encontrar application.properties");
+                throw new RuntimeException("Could not find application.properties");
             }
             assert props != null;
             props.load(input);
         } catch (IOException e) {
-            throw new RuntimeException("Error al cargar properties", e);
+            throw new RuntimeException("Error loading properties", e);
         }
     }
 
@@ -66,7 +66,7 @@ public class SqlDao {
                 notes.add(new Note(id, body, task_fk));
             }
         } catch (SQLException e) {
-            System.err.println("Error al extraer notas de la base de datos: " + e.getMessage());
+            System.err.println("Error retrieving notes from database: " + e.getMessage());
         }
         return notes;
     }
@@ -83,7 +83,7 @@ public class SqlDao {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al insertar nota en la base de datos: " + e.getMessage());
+            System.err.println("Error inserting note into database: " + e.getMessage());
         }
     }
 
@@ -104,7 +104,7 @@ public class SqlDao {
                 tasks.add(new Task(id, body, event_fk, completed));
             }
         } catch (SQLException e) {
-            System.err.println("Error al extraer tareas de la base de datos: " + e.getMessage());
+            System.err.println("Error retrieving tasks from database: " + e.getMessage());
         }
         return tasks;
     }
@@ -126,7 +126,7 @@ public class SqlDao {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al insertar tarea en la base de datos: " + e.getMessage());
+            System.err.println("Error inserting task into database: " + e.getMessage());
         }
     }
 
@@ -150,7 +150,7 @@ public class SqlDao {
                 events.add(new Event(id, title, description, eventDate, recurrent, annualRecurring, recurrenceInterval));
             }
         } catch (SQLException e) {
-            System.err.println("Error al extraer notas de la base de datos: " + e.getMessage());
+            System.err.println("Error retrieving events from database: " + e.getMessage());
         }
         return events;
     }
@@ -171,7 +171,7 @@ public class SqlDao {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al insertar evento en la base de datos: " + e.getMessage());
+            System.err.println("Error inserting event into database: " + e.getMessage());
         }
     }
 
@@ -184,7 +184,7 @@ public class SqlDao {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al eliminar nota de la base de datos: " + e.getMessage());
+            System.err.println("Error deleting note from database: " + e.getMessage());
         }
     }
 
@@ -200,7 +200,7 @@ public class SqlDao {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al actualizar nota en la base de datos: " + e.getMessage());
+            System.err.println("Error updating note in database: " + e.getMessage());
         }
     }
 
@@ -213,7 +213,7 @@ public class SqlDao {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al eliminar tarea de la base de datos: " + e.getMessage());
+            System.err.println("Error deleting task from database: " + e.getMessage());
         }
     }
 
@@ -230,7 +230,7 @@ public class SqlDao {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al actualizar tarea en la base de datos: " + e.getMessage());
+            System.err.println("Error updating task in database: " + e.getMessage());
         }
     }
 
@@ -243,7 +243,7 @@ public class SqlDao {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al eliminar evento de la base de datos: " + e.getMessage());
+            System.err.println("Error deleting event from database: " + e.getMessage());
         }
     }
 
@@ -263,7 +263,7 @@ public class SqlDao {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error al actualizar evento en la base de datos: " + e.getMessage());
+            System.err.println("Error updating event in database: " + e.getMessage());
         }
     }
 }
