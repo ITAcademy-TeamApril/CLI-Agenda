@@ -21,17 +21,17 @@ class TestEventRepository {
 
     @Test
     void testSaveEvent() {
-        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false, false, 0);
         repo.save(event);
         assertEquals(1, repo.getAllEvents().size());
     }
 
     @Test
     void testGetAllEventsReturnsACopy() {
-        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false, false, 0);
         repo.save(event);
         List<Event> events = repo.getAllEvents();
-        assertThrows(UnsupportedOperationException.class, () -> events.add(new Event(2, "Título2", "Descripción2", defaultDate, false)));
+        assertThrows(UnsupportedOperationException.class, () -> events.add(new Event(2, "Título2", "Descripción2", defaultDate, false, false, 0)));
     }
 
     @Test
@@ -41,7 +41,7 @@ class TestEventRepository {
 
     @Test
     void testFindEventByIdFound() {
-        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false, false, 0);
         repo.save(event);
         Event found = repo.findEventById(1);
         assertEquals(1, found.getId());
@@ -54,7 +54,7 @@ class TestEventRepository {
 
     @Test
     void testRemoveEventById() {
-        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false, false, 0);
         repo.save(event);
         repo.removeEventById(1);
         assertTrue(repo.getAllEvents().isEmpty());
@@ -62,7 +62,7 @@ class TestEventRepository {
 
     @Test
     void testRemoveEventByIdNotFound() {
-        Event event = new Event(1, "Título", "Descripción", defaultDate, false);
+        Event event = new Event(1, "Título", "Descripción", defaultDate, false, false, 0);
         repo.save(event);
         repo.removeEventById(99);
         assertEquals(1, repo.getAllEvents().size());
@@ -70,9 +70,9 @@ class TestEventRepository {
 
     @Test
     void testSaveMultipleEvents() {
-        repo.save(new Event(1, "Título1", "Descripción1", defaultDate, false));
-        repo.save(new Event(2, "Título2", "Descripción2", defaultDate, true));
-        repo.save(new Event(3, "Título3", "Descripción3", defaultDate, false));
+        repo.save(new Event(1, "Título1", "Descripción1", defaultDate, false, false, 0));
+        repo.save(new Event(2, "Título2", "Descripción2", defaultDate, true, false, 0));
+        repo.save(new Event(3, "Título3", "Descripción3", defaultDate, false, false, 0));
         assertEquals(3, repo.getAllEvents().size());
     }
 }

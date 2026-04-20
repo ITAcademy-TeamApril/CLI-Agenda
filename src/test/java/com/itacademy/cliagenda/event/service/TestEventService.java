@@ -85,4 +85,37 @@ class TestEventService {
         Event event = service.findEventById(999);
         assertNull(event);
     }
+
+    @Test
+    void testGetNextRecurrenciesAnnual() {
+        LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
+        Event event = service.createEvent("Evento anual", "Descripcion", dateTime, true, true, 0);
+        
+        List<LocalDateTime> recurrencies = service.getNextRecurrencies(event);
+        
+        assertEquals(5, recurrencies.size());
+        assertEquals(2026, recurrencies.get(0).getYear());
+    }
+
+    @Test
+    void testGetNextRecurrenciesMonthly() {
+        LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
+        Event event = service.createEvent("Evento mensual", "Descripcion", dateTime, true, false, 3);
+        
+        List<LocalDateTime> recurrencies = service.getNextRecurrencies(event);
+        
+        assertEquals(5, recurrencies.size());
+        assertEquals(2025, recurrencies.get(0).getYear());
+        assertEquals(9, recurrencies.get(0).getMonthValue());
+    }
+
+    @Test
+    void testGetNextRecurrenciesNonRecurring() {
+        LocalDateTime dateTime = LocalDateTime.of(2025, 6, 15, 10, 0);
+        Event event = service.createEvent("Evento no recurrente", "Descripcion", dateTime, false, false, 0);
+        
+        List<LocalDateTime> recurrencies = service.getNextRecurrencies(event);
+        
+        assertTrue(recurrencies.isEmpty());
+    }
 }

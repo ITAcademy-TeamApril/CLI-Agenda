@@ -61,6 +61,9 @@ public class TaskCli {
                 case (7):
                     deleteTask();
                     break;
+                default:
+                    System.out.println("Incorrect input, try again.");
+                    break;
             }
         } while (option != 0);
     }
@@ -127,6 +130,7 @@ public class TaskCli {
         }
 
         System.out.println("Introduce task ID:");
+        try{
         int id = scanner.nextInt();
         scanner.nextLine();
 
@@ -147,10 +151,15 @@ public class TaskCli {
                 }
             }
         }
+        } catch (Exception e) {
+            System.out.println("Task not found. Try again.");
+            scanner.nextLine();
+        }
     }
 
     public void updateTask() {
         System.out.println("Introduce task ID to update:");
+        try{
         int id = scanner.nextInt();
         scanner.nextLine();
 
@@ -199,14 +208,34 @@ public class TaskCli {
             }
         }
 
+
         service.updateTask(task);
         System.out.println("Task updated successfully.");
+        } catch (Exception e) {
+            System.out.println("Task not found. Try again.");
+            scanner.nextLine();
+        }
     }
 
     public void deleteTask() {
-        System.out.println("Introduce task ID to delete:");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        Task task = null;
+        int id = 0;
+        do {
+            System.out.println("Introduce task ID to delete:");
+            try {
+                id = scanner.nextInt();
+
+                scanner.nextLine();
+                task = service.findTaskById(id);
+                if (task == null) {
+                    System.out.println("Task not found. Try again.");
+                }
+            } catch (Exception e) {
+                System.out.println("Task not found. Try again.");
+                scanner.nextLine();
+            }
+        } while (task == null);
+
         service.deleteTaskById(id);
         System.out.println("Task deleted.");
     }

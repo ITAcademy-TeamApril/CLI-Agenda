@@ -69,7 +69,7 @@ class TestTask {
     @Test
     void testSetEvent_fkValido() {
         Task tarea = new Task(1, "Cuerpo de prueba", 0);
-        Event event = new Event(5, "Evento prueba", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false);
+        Event event = new Event(5, "Evento prueba", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false, false, 0);
         tarea.setEvent_fk(event);
         assertEquals(5, tarea.getEvent_fk());
     }
@@ -77,23 +77,23 @@ class TestTask {
     @Test
     void testSetEvent_fkNegativo() {
         Task tarea = new Task(1, "Cuerpo de prueba", 0);
-        Event event = new Event(5, "Evento prueba", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false);
+        Event event = new Event(5, "Evento prueba", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false, false, 0);
         tarea.setEvent_fk(event);
-        tarea.setEvent_fk(new Event(-1, "Evento negativo", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false));
+        tarea.setEvent_fk(new Event(-1, "Evento negativo", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false, false, 0));
         assertEquals(5, tarea.getEvent_fk());
     }
 
     @Test
     void testSetEvent_fkCero() {
         Task tarea = new Task(1, "Cuerpo de prueba", 0);
-        Event event = new Event(0, "Evento cero", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false);
+        Event event = new Event(0, "Evento cero", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false, false, 0);
         tarea.setEvent_fk(event);
         assertEquals(0, tarea.getEvent_fk());
     }
 
     @Test
     void testConstructorWithEventObject() {
-        Event event = new Event(5, "Evento prueba", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false);
+        Event event = new Event(5, "Evento prueba", "Descripcion", LocalDateTime.of(2025, 6, 15, 10, 0), false, false, 0);
         Task tarea = new Task(1, "Cuerpo", event);
         
         assertEquals(5, tarea.getEvent_fk());

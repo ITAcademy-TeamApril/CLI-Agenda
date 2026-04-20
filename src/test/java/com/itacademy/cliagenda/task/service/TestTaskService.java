@@ -88,4 +88,40 @@ class TestTaskService {
         assertNotNull(task);
         assertEquals("Tarea con evento", task.getBody());
     }
+
+    @Test
+    void testGetTasksByCompleted() {
+        Task task1 = taskService.createTask("Tarea incompleta 1");
+        Task task2 = taskService.createTask("Tarea incompleta 2");
+        Task task3 = taskService.createTask("Tarea completada");
+        task3.setCompleted(true);
+        taskService.updateTask(task3);
+        
+        List<Task> incomplete = taskService.getTasksByCompleted(false);
+        assertEquals(2, incomplete.size());
+        
+        List<Task> completed = taskService.getTasksByCompleted(true);
+        assertEquals(1, completed.size());
+        assertTrue(completed.get(0).isCompleted());
+    }
+
+    @Test
+    void testMarkTaskCompleted() {
+        Task task = taskService.createTask("Tarea sin completar");
+        assertFalse(task.isCompleted());
+        
+        taskService.markTaskCompleted(task.getId(), true);
+        
+        Task updated = taskService.findTaskById(task.getId());
+        assertTrue(updated.isCompleted());
+    }
+
+    @Test
+    void testGetTasksByEventId() {
+        Task task1 = taskService.createTask("Tarea sin evento");
+        Task task2 = taskService.createTask("Tarea sin evento 2");
+        
+        List<Task> noEvent = taskService.getTasksByEventId(0);
+        assertEquals(2, noEvent.size());
+    }
 }

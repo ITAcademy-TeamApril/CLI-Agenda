@@ -88,4 +88,13 @@ class TestNotesService {
         assertNotNull(note);
         assertEquals("Nota con tarea", note.getBody());
     }
+
+    @Test
+    void testGetNotesByTaskId() {
+        Note note1 = notesService.createNote("Nota 1", null);
+        Note note2 = notesService.createNote("Nota 2", null);
+        
+        List<Note> notesWithNoTask = notesService.getNotesByTaskId(0);
+        assertEquals(2, notesWithNoTask.size());
+    }
 }
