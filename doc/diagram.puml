@@ -22,6 +22,7 @@ package "com.itacademy.cliagenda.note" #e3f2fd {
         - body: String
         - task_fk: int
         + Note(id, body, taskFk)
+        + Note(id, body, task)
         + getId(): int
         + getBody(): String
         + changeBody(body: String)
@@ -71,6 +72,7 @@ package "com.itacademy.cliagenda.task" #e8f5e8 {
         + Task(id, body)
         + Task(id, body, eventFk)
         + Task(id, body, eventFk, completed)
+        + Task(id, body, event)
         + getId(): int
         + getBody(): String
         + changeBody(body: String)
@@ -124,9 +126,11 @@ package "com.itacademy.cliagenda.event" #fff3e0 {
         - id: int
         - title: String
         - description: String
-        - eventDate: LocalDateTime
+        - dateTimeEvent: LocalDateTime
         - recurring: boolean
-        + Event(id, title, description, dateTime, recurring)
+        - annualRecurring: boolean
+        - recurrenceInterval: int
+        + Event(id, title, description, dateTime, recurring, annualRecurring, recurrenceInterval)
         + getId(): int
         + getTitle(): String
         + changeTitle(title: String)
@@ -136,6 +140,10 @@ package "com.itacademy.cliagenda.event" #fff3e0 {
         + changeDateEvent(dateTime: LocalDateTime)
         + isRecurring(): boolean
         + setRecurring(recurring: boolean)
+        + isAnnualRecurring(): boolean
+        + setAnnualRecurring(annualRecurring: boolean)
+        + getRecurrenceInterval(): int
+        + setRecurrenceInterval(recurrenceInterval: int)
     }
     class EventRepository {
         - events: List<Event>
@@ -148,11 +156,12 @@ package "com.itacademy.cliagenda.event" #fff3e0 {
         - repo: EventRepository
         - dao: SqlDao
         + EventService(repo)
-        + createEvent(title, description, dateTime, recurring): Event
+        + createEvent(title, description, dateTime, recurring, annualRecurring, recurrenceInterval): Event
         + getAllEvents(): List<Event>
         + deleteEventById(id: int)
         + updateEvent(event: Event)
         + findEventById(id: int): Event
+        + getNextRecurrencies(event: Event): List<LocalDateTime>
     }
     class EventCli {
         - service: EventService
