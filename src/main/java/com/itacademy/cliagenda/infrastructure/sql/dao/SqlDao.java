@@ -117,7 +117,11 @@ public class SqlDao {
 
             pstmt.setInt(1, task.getId());
             pstmt.setString(2, task.getBody());
-            pstmt.setInt(3, task.getEvent_fk());
+            if (task.getEvent_fk() == 0) {
+                pstmt.setNull(3, Types.INTEGER);
+            } else {
+                pstmt.setInt(3, task.getEvent_fk());
+            }
             pstmt.setBoolean(4, task.isCompleted());
 
             pstmt.executeUpdate();
@@ -128,7 +132,7 @@ public class SqlDao {
 
     public List<Event> findAllEvents() {
         List<Event> events = new ArrayList<>();
-        String query = "SELECT id, title, description, eventDate, recurrent FROM events";
+        String query = "SELECT id, title, description, eventDate, recurrent, annualRecurring, recurrenceInterval FROM events";
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
