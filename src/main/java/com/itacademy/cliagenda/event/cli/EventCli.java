@@ -51,6 +51,9 @@ public class EventCli {
                 case 5:
                     deleteEvent();
                     break;
+                default:
+                    System.out.println("Incorrect input, try again.");
+                    break;
             }
         } while (option != 0);
     }
@@ -122,6 +125,7 @@ public class EventCli {
 
     public void findEvent() {
         System.out.println("Introduce event ID:");
+        try{
         int id = scanner.nextInt();
         scanner.nextLine();
         Event event = service.findEventById(id);
@@ -157,17 +161,36 @@ public class EventCli {
                 System.out.println("\nNo associated tasks.");
             }
         }
+        } catch (Exception e) {
+            System.out.println("Event not found. Try again.");
+            scanner.nextLine();
+        }
     }
 
     public void deleteEvent() {
-        System.out.println("Introduce event ID to delete:");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        try{
+        Event event = null;
+        int id = 0;
+        do {
+            System.out.println("Introduce event ID to delete:");
+            id = scanner.nextInt();
+            scanner.nextLine();
+            event = service.findEventById(id);
+            if (event == null) {
+                System.out.println("Event not found. Try again.");
+            }
+        } while (event == null);
+
         service.deleteEventById(id);
         System.out.println("Event deleted.");
+        } catch (Exception e) {
+            System.out.println("Event not found. Try again.");
+            scanner.nextLine();
+        }
     }
 
     public void updateEvent() {
+        try{
         System.out.println("Introduce event ID to update:");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -242,5 +265,9 @@ public class EventCli {
 
         service.updateEvent(event);
         System.out.println("Event updated successfully.");
+        } catch (Exception e) {
+            System.out.println("Event not found. Try again.");
+            scanner.nextLine();
+        }
     }
 }

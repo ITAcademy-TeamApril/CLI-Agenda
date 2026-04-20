@@ -51,6 +51,9 @@ public class NoteCli {
                 case (5):
                     deleteNote();
                     break;
+                default:
+                    System.out.println("Incorrect input, try again.");
+                    break;
             }
         } while (option != 0);
     }
@@ -97,6 +100,7 @@ public class NoteCli {
 
     public void findNote() {
         System.out.println("Introduce note ID to search it:");
+        try{
         int id = scanner.nextInt();
         scanner.nextLine(); // limpieza del fuck buffer!
         Note note = serviceNotes.findNoteById(id);
@@ -107,19 +111,37 @@ public class NoteCli {
             System.out.println("Body: " + note.getBody());
             //System.out.println("Created: " + note.getCreationDate());
         }
-
+        } catch (Exception e) {
+            System.out.println("Note not found. Try again.");
+            scanner.nextLine();
+        }
     }
 
     public void deleteNote() {
-        System.out.println("Introduce note ID to delete it");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // limpieza del mamahuevo buffer!
+        try{
+        Note note = null;
+        int id = 0;
+        do {
+            System.out.println("Introduce note ID to delete it:");
+            id = scanner.nextInt();
+            scanner.nextLine();
+            note = serviceNotes.findNoteById(id);
+            if (note == null) {
+                System.out.println("Note not found. Try again.");
+            }
+        } while (note == null);
+
         serviceNotes.deleteNoteById(id);
         System.out.println("Note with id " + id + " is correctly deleted");
+        } catch (Exception e) {
+            System.out.println("Task not found. Try again.");
+            scanner.nextLine();
+        }
     }
 
     public void updateNote() {
         System.out.println("Introduce note ID to update:");
+        try{
         int id = scanner.nextInt();
         scanner.nextLine();
         
@@ -164,7 +186,12 @@ public class NoteCli {
             }
         }
 
+
         serviceNotes.updateNote(note);
         System.out.println("Note updated successfully.");
+        } catch (Exception e) {
+            System.out.println("Task not found. Try again.");
+            scanner.nextLine();
+        }
     }
 }

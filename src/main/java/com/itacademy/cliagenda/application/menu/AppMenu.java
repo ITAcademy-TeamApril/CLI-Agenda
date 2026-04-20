@@ -52,6 +52,9 @@ public class AppMenu {
                 case (3):
                     eventCli.showMenu();
                     break;
+                default:
+                    System.out.println("Incorrect input, try again.");
+                    break;
             }
         } while (userOption != 0);
         System.out.println("Bye my friend...");
